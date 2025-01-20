@@ -29,6 +29,7 @@ except OperationalError as e:
 # Modelo de usuario
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -60,7 +61,12 @@ def login():
 
         if user:
             if user.password and check_password_hash(user.password, password):
-                session['user'] = user.first_name  
+                # Variable de sesion
+                session['user'] = {
+                    'user_id': user.user_id,
+                    'first_name': user.first_name
+                }
+
                 flash('Inicio de sesión exitoso')
                 return redirect('/home')
             else:
@@ -113,10 +119,44 @@ def register():
 
     return render_template('register.html', form=register_form)
 
-# Página de inicio
+# página de perfil
+@app.route('/perfil')
+def perfil():
+    # Llamada a la base de datos
+    user_id = session['user']['user_id']
+    user = User.query.filter_by(user_id=user_id).first()
+
+    if user:
+        logging.debug(f"Usuario encontrado: {user.first_name} {user.last_name}")
+    else:
+        logging.debug("Usuario no encontrado")
+
+    return render_template('perfil.html', user=user)
+
+# Cerrar Sesion
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    flash('Has cerrado sesión exitosamente.')
+    return redirect('/home')
+
 @app.route('/home')
 def home():
-    return "<h1>Home</h1>"
+    if 'user' not in session:
+        return redirect('/login')
+    user = session['user']
+    return render_template('home.html', user=user)
+
+# Redireccion al iniciar el servidor 
+first_request = True
+
+@app.before_request
+def initial_redirect():
+    global first_request
+    if first_request:
+        first_request = False
+        return redirect('/home')
+
 
 # Crear tablas si no existen
 if __name__ == '__main__':

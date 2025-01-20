@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+<div class="container container-body">
+    {% if user %}
+    <h1>¡Bienvenido {{ user.first_name }}!</h1>
+    <div class="shadow p-3 rounded border border-2 border-black">
+        <h2>Perfil</h2>
+        <div class="row">
+            <div class="col-6 col-perfil">
+                <h3>Información Personal</h3>
+                <p>Nombre: {{ user.first_name }}</p>
+                <p>Apellido: {{ user.last_name }}</p>
+                <p>Correo: {{ user.email }}</p>
+                <p>Matricula del vehiculo: xxxx xxx</p>
+            </div>
+            <div class="col-6 col-perfil">
+                <h3>Información de la Cuenta</h3>
+                <p>Nombre de Usuario: {{ user.username }}</p>
+                <p>Fecha de Creacion: {{ user.created_at }}</p>
+                <p>Tipo de vehiculo:</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#" class="btn btn-primary">Editar Perfil</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-primary">Salir</a>
+        </div>
+    </div>
+    {% else %}
+    <p>No se encontró la información del usuario.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -11,3 +11,13 @@ body {
     flex-direction: column;
     justify-content: center;
 }
+
+.container-body {
+    height: 100vh;
+    margin: auto;
+}
+
+.col-perfil {
+    padding-left: 10%;
+    padding-right: 10%;
+}
