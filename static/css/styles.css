@@ -4,8 +4,8 @@ body {
     font-family: "Red Hat Display", serif;
 }
 
-/* New class for the text */
-.top-text {
+/* CSS DE HOME */
+.texto-superior {
     font-family: "Red Hat Display", serif;
     font-size: 16px;
     text-align: center;
@@ -40,8 +40,8 @@ body {
     margin: auto;
 }
 
-/* New class for the additional text container */
-.additional-text-container {
+
+.seccion-container {
     margin: 20px auto;
     width: 80%;
     text-align: left;
@@ -51,11 +51,11 @@ body {
     align-items: center;
 }
 
-.additional-text-container img {
+.seccion-container img {
     margin-right: 20px;
 }
 
-.additional-text-container-right {
+.seccion-container-right {
     margin: 20px auto;
     width: 80%;
     text-align: left;
@@ -66,23 +66,24 @@ body {
     flex-direction: row-reverse;
 }
 
-.additional-text-container-right img {
+.seccion-container-right img {
     margin-left: 20px;
 }
 
-.additional-text-container img,
-.additional-text-container-right img {
+.seccion-container img,
+.seccion-container-right img {
     height: 227px;
     width: 435px;
     margin: 0;
 }
 
+/* CSS DE INFO */
 .section {
     display: flex;
     align-items: center;
     margin-left: 160px;
     margin-right: 120px;
-    margin-bottom: 40px; /* Added margin-bottom */
+    margin-bottom: 40px;
 }
 
 .section .text {
