@@ -1,9 +1,53 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-
-<h1>Hola</h1>
-
+<div class="top-text">
+    <p><b>¡Tu Parking Ideal al Alcance de un Clic! 🚗</b></p>
+    <p>¿Cansado de buscar aparcamiento y perder tiempo valioso? Con nuestra plataforma, reservar tu plaza de parking es rápido, fácil y 100% online.</p>
+</div>
+<div class="container-fluid">
+    <div class="row additional-text-container">
+        <div class="col-6">
+            <img src="{{ url_for('static', filename='images/parking.png') }}" alt="Parking Image">
+        </div>
+        <div class="col-6">
+            <p><b>¿Por qué elegirnos?</b></p>
+            <p>🅿️ Reserva Garantizada: Asegura tu plaza con antelación y olvídate del estrés de no encontrar sitio.</p>
+            <p>⏱️ Ahorra Tiempo y Dinero: Precios competitivos y sin rodeos, con tarifas claras y accesibles.</p>
+            <p>📍 Ubicaciones Estratégicas: Encuentra parkings cerca de aeropuertos, estaciones, centros comerciales o tu destino favorito.</p>
+            <p>🔒 Seguridad Total: Parkings vigilados y seguros para tu tranquilidad.</p>
+        </div>
+    </div>
+    <div class="row additional-text-container-right">
+        <div class="col-6">
+            <img src="{{ url_for('static', filename='images/parking2.png') }}" alt="Parking Image">
+        </div>
+        <div class="col-6">
+            <p>
+                <b>¡Tu Plaza en Solo 3 Pasos!</b>
+                <p>1️⃣ Busca el parking más cercano a tu destino.</p>
+                <p>2️⃣ Reserva tu plaza de forma rápida y sencilla.</p>
+                <p>3️⃣ Aparca y disfruta de tu tiempo sin preocupaciones.</p>
+                <p>🚀 Di adiós a dar vueltas buscando aparcamiento.Con nosotros, aparcar es sinónimo de comodidad, seguridad y eficiencia. ¡Prueba ahora y vive la diferencia!</p>
+                <p>📲 ¡Reserva tu plaza ya y olvídate del estrés!</p>
+            </p>
+        </div>
+    </div>
+    <div class="row additional-text-container">
+        <div class="col-6">
+            <img src="{{ url_for('static', filename='images/parking3.png') }}" alt="Parking Image">
+        </div>
+        <div class="col-6">
+            <p>
+                <p>
+                    <b>Flexibilidad para Todos tus Planes</b>
+                </p>
+                <p>Ya sea que necesites una plaza por unas horas, todo el día o incluso semanas, nos adaptamos a ti. 
+                Ofrecemos opciones de corta y larga estancia con tarifas flexibles para que solo pagues por el tiempo que realmente necesitas. ¡Tu comodidad es nuestra prioridad!</p>
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

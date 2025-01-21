@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Info{% endblock %}
+
+{% block content %}
+<div class="title">Antes de reservar!</div>
+<p class="paragraph">
+    Antes de reservar tu plaza en el parking, es importante que entiendas el significado de los colores que se muestran en el sistema. Esto te permitirá identificar rápidamente el estado de cada plaza:
+</p>
+
+<div class="section">
+    <div class="text">
+        <h3>Plaza Libre</h3>
+        <p>
+            Las plazas marcadas en verde están completamente disponibles. Esto significa que nadie las ha reservado ni están ocupadas, por lo que puedes seleccionarlas para reservar.
+            Si ves una plaza en verde y la necesitas, te recomendamos reservarla cuanto antes, ya que podría ser seleccionada por otro usuario en cualquier momento.
+        </p>
+    </div>
+    <div class="image">
+        <img src="static/images/libre.png" alt="Plaza Libre">
+    </div>
+</div>
+
+<div class="section">
+    <div class="text">
+        <h3>Plaza Reservada</h3>
+        <p>
+            Una plaza en azul indica que ya ha sido reservada por otro usuario. Aunque en este momento no está ocupada físicamente, no podrás seleccionarla ni usarla porque está apartada para alguien más.
+            Si necesitas una plaza, busca entre las opciones en color verde.
+        </p>
+    </div>
+    <div class="image">
+        <img src="static/images/reservado.png" alt="Plaza Reservada">
+    </div>
+</div>
+
+<div class="section">
+    <div class="text">
+        <h3>Plaza Ocupada</h3>
+        <p>
+            El color rojo indica que una plaza ya está siendo utilizada, es decir, hay un vehículo estacionado en ella. Esta plaza no estará disponible hasta que quede libre nuevamente.
+            Cuando la plaza sea desocupada, cambiará su color a verde si no tiene una reserva futura, o a azul si alguien la ha reservado previamente.
+        </p>
+    </div>
+    <div class="image">
+        <img src="static/images/ocupado.png" alt="Plaza Ocupada">
+    </div>
+</div>
+{% endblock %}

@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.secret_key = 'CLAVE_OCULTA'  
 
 # Conexión a la base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root2025@localhost/ParkingPython_DB'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/parkingpython_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 try:
@@ -116,7 +116,11 @@ def register():
 # Página de inicio
 @app.route('/home')
 def home():
-    return "<h1>Home</h1>"
+    return render_template('home.html')
+
+@app.route('/info')
+def info():
+    return render_template('info.html')
 
 # Crear tablas si no existen
 if __name__ == '__main__':
