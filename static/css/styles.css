@@ -35,3 +35,24 @@ body {
 .btn-danger {
     padding: 15px 30px;
 }
+
+.btn-parking-libre {
+    background-color: #00FF00;
+    border: #00FF00;
+    height: 70px;
+    width: 35px;
+}
+
+.btn-parking-reservado {
+    background-color: #24ADED;
+    border: #24ADED;
+    height: 70px;
+    width: 35px;
+}
+
+.btn-parking-ocupado {
+    background-color: #FC1E1E;
+    border: #FC1E1E;
+    height: 70px;
+    width: 35px;
+}

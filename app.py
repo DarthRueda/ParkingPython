@@ -164,12 +164,27 @@ def logout():
     flash('Has cerrado sesión exitosamente.')
     return redirect('/home')
 
+# Página de inicio
 @app.route('/home')
 def home():
     if 'user' not in session:
         return redirect('/login')
     user = session['user']
     return render_template('home.html', user=user)
+
+# Página de Reserva
+@app.route('/reserva')
+def reserva():
+    return render_template('reserva.html')
+
+
+# Procesar Reserva
+@app.route('/procesar_reserva', methods=['POST'])
+def procesar_reserva():
+    button_id = request.form['button_id']
+    # Aquí puedes manejar la lógica según el botón que se haya presionado
+    flash(f'Botón presionado: {button_id}')
+    return redirect('reserva')
 
 # Redireccion al iniciar el servidor 
 first_request = True
