@@ -34,7 +34,8 @@ class User(db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False) 
+    created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
+    vehicle_type = db.Column(db.String(50), nullable=True) 
 
     def __str__(self):
         return self.first_name
@@ -132,6 +133,29 @@ def perfil():
         logging.debug("Usuario no encontrado")
 
     return render_template('perfil.html', user=user)
+
+# Edicion del perfil
+@app.route('/editar_perfil', methods=['POST'])
+def editar_perfil():
+    if 'user' not in session:
+        return redirect('/login')
+    
+    user_id = session['user']['user_id']
+    user = User.query.filter_by(user_id=user_id).first()
+    
+    if user:
+        user.first_name = request.form['first_name']
+        user.last_name = request.form['last_name']
+        user.email = request.form['email']
+        user.username = request.form['username']
+        user.vehicle_type = request.form['vehicle_type']
+        
+        db.session.commit()
+        flash('Perfil actualizado exitosamente.')
+    else:
+        flash('No se encontró la información del usuario.')
+    
+    return redirect('/perfil')
 
 # Cerrar Sesion
 @app.route('/logout')

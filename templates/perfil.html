@@ -8,25 +8,49 @@
     <h1>¡Bienvenido {{ user.first_name }}!</h1>
     <div class="shadow p-3 rounded border border-2 border-black">
         <h2>Perfil</h2>
-        <div class="row">
-            <div class="col-6 col-perfil">
-                <h3>Información Personal</h3>
-                <p>Nombre: {{ user.first_name }}</p>
-                <p>Apellido: {{ user.last_name }}</p>
-                <p>Correo: {{ user.email }}</p>
-                <p>Matricula del vehiculo: xxxx xxx</p>
+        <form method="POST" action="{{ url_for('editar_perfil') }}">
+            <div class="row">
+                <div class="col-6 col-perfil">
+                    <h3>Información Personal</h3>
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                    </div>
+                </div>
+                <div class="col-6 col-perfil">
+                    <h3>Información de la Cuenta</h3>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="created_at" class="form-label">Fecha de Creacion</label>
+                        <input type="text" class="form-control" id="created_at" name="created_at" value="{{ user.created_at }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vehicle_type">Tipo de Vehículo</label>
+                        <select class="form-select" id="vehicle_type" name="vehicle_type">
+                            <option value="Carro" {% if user.vehicle_type=='Coche' %}selected{% endif %}>Coche</option>
+                            <option value="Moto" {% if user.vehicle_type=='Moto' %}selected{% endif %}>Moto</option>
+                            <option value="Bicicleta" {% if user.vehicle_type=='Bicicleta' %}selected{% endif %}>Bicicleta</option>
+                            <option value="Patinete" {% if user.vehicle_type=='Patinete' %}selected{% endif %}>Patinete</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 col-perfil">
-                <h3>Información de la Cuenta</h3>
-                <p>Nombre de Usuario: {{ user.username }}</p>
-                <p>Fecha de Creacion: {{ user.created_at }}</p>
-                <p>Tipo de vehiculo:</p>
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="{{ url_for('home') }}" class="btn btn-danger">Salir</a>
             </div>
-        </div>
-        <div class="d-flex justify-content-center gap-3">
-            <a href="#" class="btn btn-primary">Editar Perfil</a>
-            <a href="{{ url_for('home') }}" class="btn btn-primary">Salir</a>
-        </div>
+        </form>
     </div>
     {% else %}
     <p>No se encontró la información del usuario.</p>

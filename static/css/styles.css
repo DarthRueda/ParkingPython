@@ -21,3 +21,17 @@ body {
     padding-left: 10%;
     padding-right: 10%;
 }
+
+.btn-primary {
+    background-color: #24ADED;
+    border: #24ADED;
+    padding: 15px 30px;
+}
+
+.btn-primary:hover {
+    background-color: #1875A1;
+}
+
+.btn-danger {
+    padding: 15px 30px;
+}
