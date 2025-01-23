@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Reserva{% endblock %}
+
+{% block content %}
+
+<h1>Estas apunto de reservar!</h1>
+<p>Para finalizar necesitaremos que nos facilites algunos datos tuyos para completar la reservar del parking.</p>
+
+<form action="" method="post">
+    <div>
+        <div class="mb-3">
+            <label for="first_name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="first_name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+        </div>
+    </div>
+</form>
+
+{% endblock content %}

@@ -182,7 +182,6 @@ def reserva():
 @app.route('/procesar_reserva', methods=['POST'])
 def procesar_reserva():
     button_id = request.form['button_id']
-    # Aquí puedes manejar la lógica según el botón que se haya presionado
     flash(f'Botón presionado: {button_id}')
     return redirect('reserva')
 
