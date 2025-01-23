@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 import pymysql
 from sqlalchemy.exc import OperationalError
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -26,6 +27,8 @@ except OperationalError as e:
     db = None
     logging.error(f"Error de conexión a la base de datos: {e.orig}")
 
+# Modellos DB
+
 # Modelo de usuario
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -35,10 +38,25 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
-    vehicle_type = db.Column(db.String(50), nullable=True) 
+
 
     def __str__(self):
         return self.first_name
+    
+# Modelo Reservas
+class Reserva(db.Model):
+    reserva_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    reservation_start_time = db.Column(db.TIMESTAMP, nullable=False)
+    reservation_end_time = db.Column(db.TIMESTAMP, nullable=False)
+    vehicle_type = db.Column(db.String(50), nullable=True)
+    plate = db.Column(db.String(50), nullable=True)
+    import_price = db.Column(db.Float, nullable=False)  
+
+    def __str__(self):
+        return str(self.reserva_id)
 
 # Formulario de inicio de sesión
 class LoginForm(FlaskForm):
@@ -148,7 +166,6 @@ def editar_perfil():
         user.last_name = request.form['last_name']
         user.email = request.form['email']
         user.username = request.form['username']
-        user.vehicle_type = request.form['vehicle_type']
         
         db.session.commit()
         flash('Perfil actualizado exitosamente.')
@@ -177,13 +194,43 @@ def home():
 def reserva():
     return render_template('reserva.html')
 
+@app.route('/reserva2', methods=['GET', 'POST'])
+def reserva2():
+    if request.method == 'POST':
+        button_id = request.form['button_id']
+        session['parking'] = button_id 
+    return render_template('reserva2.html')
+
 
 # Procesar Reserva
 @app.route('/procesar_reserva', methods=['POST'])
 def procesar_reserva():
-    button_id = request.form['button_id']
-    flash(f'Botón presionado: {button_id}')
-    return redirect('reserva')
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    plate = request.form['plate']
+    vehicle_type = request.form['vehicle_type']
+    start_date = datetime.strptime(request.form['start-date'], '%Y-%m-%d')
+    end_date = datetime.strptime(request.form['end-date'], '%Y-%m-%d')
+
+    nueva_reserva = Reserva(
+        first_name=first_name,
+        last_name=last_name,
+        plate=plate,
+        vehicle_type=vehicle_type,
+        reservation_start_time=start_date,
+        reservation_end_time=end_date,
+        import_price=0.0  
+    )
+
+    try:
+        db.session.add(nueva_reserva)
+        db.session.commit()
+        flash('Reserva completada exitosamente.')
+        return redirect('/perfil')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Ocurrió un error al procesar la reserva: {e}')
+        return redirect('/perfil')
 
 # Redireccion al iniciar el servidor 
 first_request = True
