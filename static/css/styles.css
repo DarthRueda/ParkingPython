@@ -103,3 +103,29 @@ h3 {
     text-align: left;
     margin-right: 120px;
 }
+
+.btn-info {
+    width: 300px;
+    height: 82px;
+    display: inline-block;
+    margin: 0 25px; 
+    text-align: center;
+    line-height: 82px; 
+    font-family: "Red Hat Display", serif;
+    font-size: 32px;
+    color: #fff;
+    background-color: #22A8E6;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-info:hover {
+    background-color: #1875A1;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 40px;
+}
