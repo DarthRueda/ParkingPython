@@ -4,10 +4,128 @@ body {
     font-family: "Red Hat Display", serif;
 }
 
+/* CSS DE HOME */
+.texto-superior {
+    font-family: "Red Hat Display", serif;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.title {
+    font-family: "Red Hat Display", serif;
+    font-size: 48px;
+    text-align: left;
+    margin-top: 20px;
+    margin-left: 120px;
+    margin-right: 120px;
+}
+
+.paragraph {
+    font-family: "Red Hat Display", serif;
+    font-size: 16px;
+    text-align: left;
+    margin-top: 20px;
+    margin-left: 120px;
+    margin-right: 120px;
+}
+
 .container-form {
     height: 100vh;
     width: 33%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    text-align: center;
+    margin: auto;
+}
+
+
+.seccion-container {
+    margin: 20px auto;
+    width: 80%;
+    text-align: left;
+    font-family: "Red Hat Display", serif;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.seccion-container img {
+    margin-right: 20px;
+}
+
+.seccion-container-right {
+    margin: 20px auto;
+    width: 80%;
+    text-align: left;
+    font-family: "Red Hat Display", serif;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.seccion-container-right img {
+    margin-left: 20px;
+}
+
+.seccion-container img,
+.seccion-container-right img {
+    height: 227px;
+    width: 435px;
+    margin: 0;
+}
+
+/* CSS DE INFO */
+.section {
+    display: flex;
+    align-items: center;
+    margin-left: 160px;
+    margin-right: 120px;
+    margin-bottom: 40px;
+}
+
+.section .text {
+    flex: 0 0 75%;
+    max-width: 75%;
+}
+
+.section .image {
+    flex: 0 0 15%;
+    max-width: 25%;
+    text-align: right;
+}
+
+h3 {
+    font-family: "Red Hat Display", serif;
+    font-size: 32px;
+    text-align: left;
+    margin-right: 120px;
+}
+
+.btn-info {
+    width: 300px;
+    height: 82px;
+    display: inline-block;
+    margin: 0 25px; 
+    text-align: center;
+    line-height: 82px; 
+    font-family: "Red Hat Display", serif;
+    font-size: 32px;
+    color: #fff;
+    background-color: #22A8E6;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-info:hover {
+    background-color: #1875A1;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 40px;
 }
