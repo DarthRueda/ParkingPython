@@ -1,4 +1,4 @@
-import os
+
 
 class Config:
     # Conexión a la base de datos

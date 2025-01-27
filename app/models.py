@@ -1,7 +1,8 @@
-from app import db
+from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
+    __tablename__='users'
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     first_name = db.Column(db.String(100), nullable=False)
