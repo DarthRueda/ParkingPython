@@ -1,10 +1,8 @@
 from flask import render_template, redirect, url_for, flash, session, request
-from . import  db
+from . import db
 from .forms import LoginForm, ReservaForm
 from .models import User, Reserva
 from datetime import datetime
-
-
 
 def register_routes(app):
 
@@ -38,14 +36,14 @@ def register_routes(app):
         user = User.query.filter_by(user_id=user_id).first()
         return render_template('perfil.html', user=user)
 
-    @app.route('/reserva2', methods=['GET', 'POST'])
-    def reserva2():
-        form = ReservaForm()
-        if form.validate_on_submit():
-            button_id = request.form['button_id']
-            session['parking'] = button_id
-            return redirect(url_for('procesar_reserva'))
-        return render_template('reserva2.html', form=form)
+    # @app.route('/reserva2', methods=['GET', 'POST'])
+    # def reserva2():
+    #     form = ReservaForm()
+    #     if form.validate_on_submit():
+    #         button_id = request.form.get('button_id')
+    #         session['parking'] = button_id
+    #         return redirect(url_for('procesar_reserva'))
+    #     return render_template('reserva2.html', form=form)
 
     @app.route('/procesar_reserva', methods=['POST'])
     def procesar_reserva():
@@ -74,3 +72,9 @@ def register_routes(app):
             flash('Reserva completada exitosamente.')
             return redirect(url_for('perfil'))
         return redirect(url_for('reserva2'))
+
+    @app.route('/logout')
+    def logout():
+        session.pop('user', None)
+        flash('Has cerrado sesión exitosamente.')
+        return redirect(url_for('login'))
