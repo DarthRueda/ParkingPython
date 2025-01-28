@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Reserva{% endblock %}
+
+{% block content %}
+<div class="container container-body">
+    <h1>Estas apunto de reservar!</h1>
+    <p>Para finalizar necesitaremos que nos facilites algunos datos tuyos para completar la reservar del parking.</p>
+
+    <form action="{{ url_for('procesar_reserva') }}" method="post">
+        <div class="d-flex">
+            <div class="mb-3">
+                <label for="first_name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="first_name" name="first_name">
+            </div>
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="last_name" name="last_name">
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="mb-3">
+                <label for="plate" class="form-label">Matricula</label>
+                <input type="text" class="form-control" id="plate" name="plate">
+            </div>
+            <div class="mb-3">
+                <label for="vehicle_type">Tipo de Vehículo</label>
+                <select class="form-select" id="vehicle_type" name="vehicle_type">
+                    <option value="Carro">Coche</option>
+                    <option value="Moto">Moto</option>
+                    <option value="Bicicleta">Bicicleta</option>
+                    <option value="Patinete">Patinete</option>
+                </select>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="mb-3">
+                <label for="start-date" class="form-label">Fecha Inicio</label>
+                <input type="date" class="form-control" id="start-date" name="start-date">
+            </div>
+            <div class="mb-3">
+                <label for="end-date" class="form-label">Fecha Final</label>
+                <input type="date" class="form-control" id="end-date" name="end-date">
+            </div>
+        </div>
+        <div class="d-flex">
+            <input type="submit" value="Reservar" class="btn btn-primary">
+            <input type="button" value="Cancelar" class="btn btn-danger">
+        </div>
+    </form>
+</div>
+{% endblock %}
