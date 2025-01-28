@@ -12,19 +12,22 @@
             <div class="d-flex flex-column">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
-                    {{ form.username(class="form-control", id="nombre") }}
+                    <input type="text" name="nombre" id="nombre" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="apellidos" class="form-label">Apellidos</label>
-                    {{ form.lastname(class="form-control", id="apellidos") }}
+                    <input type="text" name="apellidos" id="apellidos" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    {{ form.email(class="form-control", id="email") }}
+                    <input type="text" name="email" id="email" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    {{ form.password(class="form-control", id="password") }}
+                    <input type="text" name="password" id="password" class="form-control">
+                </div>
+                <div>
+                    <p>Ya tienes cuenta? <a href="{{ url_for('login') }}" class="text-decoration-none">Inicia Sesion</a></p>
                 </div>
                 <button type="submit" class="btn btn-primary">Registrarse</button>
             </div>
