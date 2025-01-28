@@ -12,21 +12,30 @@
 
             <div class="d-flex flex-column">
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="text" name="email" id="email" class="form-control">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control") }}
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" name="password" id="password" class="form-control">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control") }}
                 </div>
                 <div>
                     <p>No tienes cuenta? <a href="{{ url_for('register') }}" class="text-decoration-none">Regístrate</a></p>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
             </div>
         </form>
     </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="alert alert-warning mt-3">
+        {% for category, message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
 </div>
 
 {% endblock %}

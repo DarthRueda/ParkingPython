@@ -35,3 +35,12 @@ class Reserva(db.Model):
 
     def __repr__(self):
         return f'<Reserva {self.reserva_id}>'
+
+class Parking(db.Model):
+    __tablename__ = 'parking'
+    parking_id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(100), nullable=False)
+    is_free = db.Column(db.Boolean, default=True)
+
+    def __repr__(self):
+        return f'<Parking {self.location} - {"Libre" if self.is_free else "Ocupado"}>'
