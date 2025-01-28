@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Bienvenido, {{ user.first_name }}</h1>
+    {% if user %}
+    <a href="{{ url_for('perfil') }}" class="btn btn-primary">Perfil</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Cerrar Sesión</a>
+    <a href="{{ url_for('parkings')}}">Reservar</a>
+    {% else %}
+    <p>No has iniciado sesión.</p>
+    <a href="{{ url_for('register')}}">Registrate</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Red Hat Display", serif;
+}
+
+.container-form {
+    height: 100vh;
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container-body {
+    height: 100vh;
+    margin: auto;
+}
+
+.col-perfil {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.btn-primary {
+    background-color: #24ADED;
+    border: #24ADED;
+    padding: 15px 30px;
+}
+
+.btn-primary:hover {
+    background-color: #1875A1;
+}
+
+.btn-danger {
+    padding: 15px 30px;
+}
+
+.btn-parking-libre {
+    background-color: #00FF00;
+    border: #00FF00;
+    height: 70px;
+    width: 35px;
+}
+
+.btn-parking-reservado {
+    background-color: #24ADED;
+    border: #24ADED;
+    height: 70px;
+    width: 35px;
+}
+
+.btn-parking-ocupado {
+    background-color: #FC1E1E;
+    border: #FC1E1E;
+    height: 70px;
+    width: 35px;
+}
+
+.parking-card {
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.parking-card.bg-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.parking-card.bg-danger {
+    background-color: #dc3545;
+    color: white;
+}
