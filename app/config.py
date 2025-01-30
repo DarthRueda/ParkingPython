@@ -1,5 +1,3 @@
-
-
 class Config:
     # Conexión a la base de datos
     SECRET_KEY = 'secret_key'

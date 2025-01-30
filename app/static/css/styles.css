@@ -56,3 +56,24 @@ body {
     height: 70px;
     width: 35px;
 }
+
+.parking-card {
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.parking-card.bg-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.parking-card.bg-danger {
+    background-color: #dc3545;
+    color: white;
+}

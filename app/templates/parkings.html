@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Parkings{% endblock %}
+
+{% block content %}
+<div class="container container-body">
+    <h1 class="text-Left mb-4">Parkings</h1>
+    <div class="shadow p-3 rounded border border-2 border-black">
+        <h2>Parkings Disponibles</h2>
+        <form method="POST" action="{{ url_for('reservar_parking') }}">
+            <div class="row">
+                {% for parking in parkings %}
+                <div class="col-2 mb-3">
+                    <div class="card parking-card {{ 'bg-success' if parking.is_free else 'bg-danger' }}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ parking.location }}</h5>
+                            <p class="card-text">{{ 'Libre' if parking.is_free else 'Ocupado' }}</p>
+                            {% if parking.is_free %}
+                            <button type="submit" name="parking_id" value="{{ parking.parking_id }}" class="btn btn-primary btn-sm">Reservar</button>
+                            {% else %}
+                            <button type="button" class="btn btn-secondary btn-sm" disabled>Ocupado</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

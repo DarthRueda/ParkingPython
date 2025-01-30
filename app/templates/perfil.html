@@ -8,31 +8,32 @@
     <h1>¡Bienvenido {{ user.first_name }}!</h1>
     <div class="shadow p-3 rounded border border-2 border-black">
         <h2>Perfil</h2>
-        <form method="POST" action="{{ url_for('editar_perfil') }}">
+        <form method="POST" action="{{ url_for('perfil') }}">
+            {{ form.hidden_tag() }}
             <div class="row">
                 <div class="col-6 col-perfil">
                     <h3>Información Personal</h3>
                     <div class="mb-3">
-                        <label for="first_name" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                        {{ form.first_name.label(class="form-label") }}
+                        {{ form.first_name(class="form-control") }}
                     </div>
                     <div class="mb-3">
-                        <label for="last_name" class="form-label">Apellido</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                        {{ form.last_name.label(class="form-label") }}
+                        {{ form.last_name(class="form-control") }}
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Correo</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
                     </div>
                 </div>
                 <div class="col-6 col-perfil">
                     <h3>Información de la Cuenta</h3>
                     <div class="mb-3">
-                        <label for="username" class="form-label">Nombre de Usuario</label>
-                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control") }}
                     </div>
                     <div class="mb-3">
-                        <label for="created_at" class="form-label">Fecha de Creacion</label>
+                        <label for="created_at" class="form-label">Fecha de Creación</label>
                         <input type="text" class="form-control" id="created_at" name="created_at" value="{{ user.created_at }}" readonly>
                     </div>
                 </div>
