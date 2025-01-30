@@ -11,6 +11,10 @@
             {{ form.hidden_tag() }}
             <div class="d-flex flex-column">
                 <div class="mb-3">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control") }}
+                </div>
+                <div class="mb-3">
                     {{ form.first_name.label(class="form-label") }}
                     {{ form.first_name(class="form-control") }}
                 </div>

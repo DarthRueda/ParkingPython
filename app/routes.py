@@ -16,7 +16,7 @@ def register_routes(app):
                 last_name=form.last_name.data,
                 email=form.email.data
             )
-            user.set_password(form.password.data) 
+            user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
             flash('Registro exitoso. Por favor, inicia sesión.')
