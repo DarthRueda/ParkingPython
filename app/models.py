@@ -9,6 +9,7 @@ class User(db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    plate = db.Column(db.String(50), unique=True, nullable=True)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     reservas = db.relationship('Reserva', backref='user', lazy=True)
 
@@ -24,14 +25,7 @@ class User(db.Model):
 class Reserva(db.Model):
     __tablename__ = 'reservas'
     reserva_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    first_name = db.Column(db.String(100), nullable=False)
-    last_name = db.Column(db.String(100), nullable=False)
-    reservation_start_time = db.Column(db.TIMESTAMP, nullable=False)
-    reservation_end_time = db.Column(db.TIMESTAMP, nullable=False)
-    vehicle_type = db.Column(db.String(50), nullable=True)
-    plate = db.Column(db.String(50), nullable=True)
-    import_price = db.Column(db.Float, nullable=False)
+    plate = db.Column(db.String(50), db.ForeignKey('users.plate'), nullable=False)
 
     def __repr__(self):
         return f'<Reserva {self.reserva_id}>'
