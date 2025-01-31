@@ -91,6 +91,15 @@ def register_routes(app):
         session.pop('user', None)
         flash('Has cerrado sesión exitosamente.')
         return redirect(url_for('login'))
+
     @app.route('/info')
     def info():
         return render_template('info.html')
+
+    @app.route('/disponibilidad', methods=['GET'])
+    def disponibilidad():
+        return redirect(url_for('parkings'))
+
+    @app.route('/reservar', methods=['GET'])
+    def reservar():
+        return redirect(url_for('parkings'))

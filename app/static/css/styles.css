@@ -4,13 +4,6 @@ body {
     font-family: "Red Hat Display", serif;
 }
 
-.container-form {
-    height: 100vh;
-    width: 33%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
 
 .container-body {
     height: 100vh;
@@ -105,6 +98,16 @@ body {
 }
 
 .container-form {
+    height: 60vh;
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+}
+
+.container-form2 {
     height: 100vh;
     width: 33%;
     display: flex;
@@ -202,4 +205,72 @@ h3 {
 .button-container {
     text-align: center;
     margin-top: 40px;
+}
+
+/* Footer styles */
+footer {
+    background-color: #0E445D;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+footer img {
+    width: 150px;
+    height: 150px;
+    margin-left: 20px;
+}
+
+footer .footer-columns {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 20px;
+}
+
+footer .footer-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin: 20px;
+}
+
+footer .footer-column a {
+    color: white;
+    text-decoration: none;
+    margin: 5px 0;
+}
+
+footer .footer-column a:hover {
+    text-decoration: underline;
+}
+
+/* Header styles */
+header {
+    background-color: #0E445D;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+header img {
+    width: 150px;
+    height: 150px;
+    margin-left: 20px;
+}
+
+header .icons {
+    display: flex;
+    gap: 10px;
+    margin-right: 20px;
+}
+
+header .icons img {
+    width: 39px;
+    height: 39px;
 }

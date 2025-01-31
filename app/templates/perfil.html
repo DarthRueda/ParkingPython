@@ -23,7 +23,7 @@
                     </div>
                     <div class="mb-3">
                         {{ form.email.label(class="form-label") }}
-                        {{ form.email(class="form-control") }}
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" readonly>
                     </div>
                 </div>
                 <div class="col-6 col-perfil">
@@ -41,6 +41,7 @@
             <div class="d-flex justify-content-center gap-3">
                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 <a href="{{ url_for('home') }}" class="btn btn-danger">Salir</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary d-flex align-items-center justify-content-center">Cerrar Sesión</a>
             </div>
         </form>
     </div>
