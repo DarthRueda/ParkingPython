@@ -60,9 +60,10 @@ def register_routes(app):
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.email = form.email.data
+            user.plate = request.form.get('plate')  # Update the plate field
             db.session.commit()
             flash('Perfil actualizado exitosamente.')
-            return redirect(url_for('perfil'))
+            return redirect(url_for('home'))  # Redirect to home instead of perfil
         return render_template('perfil.html', user=user, form=form)
 
     @app.route('/parkings', methods=['GET'])
@@ -84,13 +85,13 @@ def register_routes(app):
             flash('Parking reservado exitosamente.')
         else:
             flash('El parking no está disponible.')
-        return redirect(url_for('parkings'))
+        return redirect(url_for('home'))  # Redirect to home instead of parkings
 
     @app.route('/logout')
     def logout():
         session.pop('user', None)
         flash('Has cerrado sesión exitosamente.')
-        return redirect(url_for('login'))
+        return redirect(url_for('home'))  # Redirect to home instead of login
 
     @app.route('/info')
     def info():

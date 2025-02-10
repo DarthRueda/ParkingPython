@@ -3,6 +3,17 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-info">
+                {% for category, message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
 <div class="texto-superior">
     <p><b>¡Tu Parking Ideal al Alcance de un Clic! 🚗</b></p>
     <p>¿Cansado de buscar aparcamiento y perder tiempo valioso? Con nuestra plataforma, reservar tu plaza de parking es rápido, fácil y 100% online.</p>

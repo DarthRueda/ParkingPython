@@ -25,6 +25,10 @@
                         {{ form.email.label(class="form-label") }}
                         <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" readonly>
                     </div>
+                    <div class="mb-3">
+                        <label for="plate" class="form-label">Matrícula</label>
+                        <input type="text" class="form-control" id="plate" name="plate" value="{{ user.plate }}">
+                    </div>
                 </div>
                 <div class="col-6 col-perfil">
                     <h3>Información de la Cuenta</h3>
