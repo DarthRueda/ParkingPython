@@ -38,3 +38,13 @@ class Parking(db.Model):
 
     def __repr__(self):
         return f'<Parking {self.location} - {"Libre" if self.is_free else "Ocupado"}>'
+
+class Log(db.Model):
+    __tablename__ = 'logs'
+    id = db.Column(db.Integer, primary_key=True)
+    matricula = db.Column(db.String(50), nullable=False)
+    hora_entrada = db.Column(db.DateTime, nullable=False)
+    hora_salida = db.Column(db.DateTime, nullable=True)
+
+    def __repr__(self):
+        return f'<Log {self.matricula} - Entrada: {self.hora_entrada} - Salida: {self.hora_salida}>'

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Disponibilidad{% endblock %}
+
+{% block content %}
+<div class="container container-body2">
+    <div class="shadow p-3 rounded border border-2 border-black">
+        <h2>Disponibilidad</h2>
+        <div class="row mb-3">
+            <div class="col-6 text-center">
+                <img src="{{ url_for('static', filename='img/libre.png') }}" alt="Libre">
+                <p>{{ free_parkings }} Plazas Libres ({{ free_percentage }}%)</p>
+            </div>
+            <div class="col-6 text-center">
+                <img src="{{ url_for('static', filename='img/ocupado.png') }}" alt="Ocupado">
+                <p>{{ occupied_parkings }} Plazas Ocupadas ({{ occupied_percentage }}%)</p>
+            </div>
+        </div>
+        <div class="row">
+            {% for parking in parkings[:25] %}
+            <div class="col-2 mb-3">
+                <div class="card parking-card {{ 'bg-success' if parking.is_free else 'bg-danger' }}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ parking.location }}</h5>
+                        <p class="card-text">{{ 'Libre' if parking.is_free else 'Ocupado' }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

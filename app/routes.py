@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, session, request
 from . import db
 from .forms import LoginForm, RegisterForm, ReservaForm, EditProfileForm
-from .models import User, Reserva, Parking
+from .models import User, Reserva, Parking, Log
 from datetime import datetime
 
 def register_routes(app):
@@ -85,7 +85,7 @@ def register_routes(app):
             flash('Parking reservado exitosamente.')
         else:
             flash('El parking no está disponible.')
-        return redirect(url_for('home'))  # Redirect to home instead of parkings
+        return redirect(url_for('parkings'))
 
     @app.route('/logout')
     def logout():
@@ -97,10 +97,89 @@ def register_routes(app):
     def info():
         return render_template('info.html')
 
+    def calculate_parking_percentages():
+        total_parkings = 25
+        free_parkings = Parking.query.filter_by(is_free=True).count()
+        occupied_parkings = Parking.query.filter_by(is_free=False).count()
+        free_percentage = (free_parkings / total_parkings) * 100
+        occupied_percentage = (occupied_parkings / total_parkings) * 100
+        return round(free_percentage, 2), round(occupied_percentage, 2)
+
+    def calculate_parking_counts():
+        free_parkings = Parking.query.filter_by(is_free=True).count()
+        occupied_parkings = Parking.query.filter_by(is_free=False).count()
+        return free_parkings, occupied_parkings
+
     @app.route('/disponibilidad', methods=['GET'])
     def disponibilidad():
-        return redirect(url_for('parkings'))
+        if 'user' not in session:
+            return redirect(url_for('login'))
+        parkings = Parking.query.all()
+        free_parkings, occupied_parkings = calculate_parking_counts()
+        free_percentage, occupied_percentage = calculate_parking_percentages()
+        return render_template('disponibilidad.html', parkings=parkings, free_parkings=free_parkings, occupied_parkings=occupied_parkings, free_percentage=free_percentage, occupied_percentage=occupied_percentage)
 
     @app.route('/reservar', methods=['GET'])
     def reservar():
         return redirect(url_for('parkings'))
+    
+    @app.route('/api/entrada', methods=['POST'])
+    def entrada():
+        data = request.get_json(force=True)
+        plate = data.get('plate')
+
+        if not plate:
+            return {'error': 'Matricula no proporcionada'}, 400
+
+        user = User.query.filter_by(plate=plate).first()
+
+        if user:
+            parking = Parking.query.filter_by(is_free=True).first()
+            if parking:
+                new_log = Log(
+                    matricula=plate,
+                    hora_entrada=datetime.now()
+                )
+                db.session.add(new_log)
+                db.session.commit()
+                return {'message': 'Benvingut al bernat el ferrer'}, 200
+            else:
+                return {'message': 'Matricula en el sistema, pero no hay parkings libres'}, 200
+        else:
+            return {'error': 'Matricula no encontrada'}, 404
+
+        return data
+
+    @app.route('/api/actualizarplaza', methods=['POST'])
+    def actualizar_plaza():
+        data = request.get_json(force=True)
+        parking_id = data.get('plaza_parking')
+
+        if not parking_id:
+            return {'error': 'ID de plaza no proporcionado'}, 400
+
+        parking = Parking.query.get(parking_id)
+
+        if not parking:
+            return {'error': 'Plaza no encontrada'}, 404
+
+        parking.is_free = not parking.is_free
+        db.session.commit()
+        return {'message': 'Estado de la plaza actualizado'}, 200
+
+    @app.route('/api/salida', methods=['POST'])
+    def salida():
+        data = request.get_json(force=True)
+        plate = data.get('plate')
+
+        if not plate:
+            return {'error': 'Matricula no proporcionada'}, 400
+
+        log = Log.query.filter_by(matricula=plate, hora_salida=None).first()
+
+        if log:
+            log.hora_salida = datetime.now()
+            db.session.commit()
+            return {'message': "Esperem veure't aviat"}, 200
+        else:
+            return {'error': 'Matricula no encontrada o ya ha salido'}, 404

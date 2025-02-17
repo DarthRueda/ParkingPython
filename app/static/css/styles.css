@@ -8,8 +8,14 @@ body {
 .container-body {
     height: 100vh;
     margin: auto;
+    margin-bottom: 500px;
 }
 
+.container-body2 {
+    height: 100vh;
+    margin: auto;
+    margin-bottom: 690px;
+}
 .col-perfil {
     padding-left: 10%;
     padding-right: 10%;
@@ -18,7 +24,7 @@ body {
 .btn-primary {
     background-color: #24ADED;
     border: #24ADED;
-    padding: 15px 30px;
+    padding: 10px 15px;
 }
 
 .btn-primary:hover {
@@ -30,7 +36,7 @@ body {
 }
 
 .btn-parking-libre {
-    background-color: #00FF00;
+    background-color: #00FF00 !important;
     border: #00FF00;
     height: 70px;
     width: 35px;
@@ -54,7 +60,8 @@ body {
     border-radius: 10px;
     padding: 10px;
     margin: 5px;
-    height: 100px;
+    height: 200px;
+    width: 130px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -62,7 +69,7 @@ body {
 }
 
 .parking-card.bg-success {
-    background-color: #28a745;
+    background-color: #08b208 !important;
     color: white;
 }
 
@@ -255,7 +262,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 0px 20px;
 }
 
 header img {
