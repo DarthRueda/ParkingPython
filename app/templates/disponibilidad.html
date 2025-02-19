@@ -16,8 +16,24 @@
                 <p>{{ occupied_parkings }} Plazas Ocupadas ({{ occupied_percentage }}%)</p>
             </div>
         </div>
-        <div class="row">
-            {% for parking in parkings[:25] %}
+        <div class="btn-group" role="group">
+            <button type="button" id="btn-arriba" class="btn btn-primary" onclick="showParking('arriba')">Parking Arriba</button>
+            <button type="button" id="btn-abajo" class="btn btn-secondary" onclick="showParking('abajo')">Parking Abajo</button>
+        </div>
+        <div id="parking-arriba" class="row parking-section">
+            {% for parking in parkings if parking.location == 'Parking Arriba' %}
+            <div class="col-2 mb-3">
+                <div class="card parking-card {{ 'bg-success' if parking.is_free else 'bg-danger' }}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ parking.location }}</h5>
+                        <p class="card-text">{{ 'Libre' if parking.is_free else 'Ocupado' }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div id="parking-abajo" class="row parking-section" style="display: none;">
+            {% for parking in parkings if parking.location == 'Parking Abajo' %}
             <div class="col-2 mb-3">
                 <div class="card parking-card {{ 'bg-success' if parking.is_free else 'bg-danger' }}">
                     <div class="card-body text-center">
@@ -30,4 +46,14 @@
         </div>
     </div>
 </div>
+<script>
+    function showParking(parkingType) {
+        document.getElementById('parking-arriba').style.display = parkingType === 'arriba' ? 'flex' : 'none';
+        document.getElementById('parking-abajo').style.display = parkingType === 'abajo' ? 'flex' : 'none';
+        document.getElementById('btn-arriba').classList.toggle('btn-primary', parkingType === 'arriba');
+        document.getElementById('btn-arriba').classList.toggle('btn-secondary', parkingType !== 'arriba');
+        document.getElementById('btn-abajo').classList.toggle('btn-primary', parkingType === 'abajo');
+        document.getElementById('btn-abajo').classList.toggle('btn-secondary', parkingType !== 'abajo');
+    }
+</script>
 {% endblock %}

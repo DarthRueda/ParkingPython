@@ -8,13 +8,13 @@ body {
 .container-body {
     height: 100vh;
     margin: auto;
-    margin-bottom: 500px;
+    margin-bottom: 100px;
 }
 
 .container-body2 {
     height: 100vh;
     margin: auto;
-    margin-bottom: 690px;
+    margin-bottom: 200px;
 }
 .col-perfil {
     padding-left: 10%;
@@ -76,6 +76,11 @@ body {
 .parking-card.bg-danger {
     background-color: #dc3545;
     color: white;
+}
+
+.parking-section {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 /* CSS DE HOME */
