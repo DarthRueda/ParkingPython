@@ -11,8 +11,9 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     plate = db.Column(db.String(50), unique=True, nullable=True)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
+    
     reservas = db.relationship('Reserva', backref='user', lazy=True)
-
+    
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
@@ -22,13 +23,18 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
+
 class Reserva(db.Model):
     __tablename__ = 'reservas'
     reserva_id = db.Column(db.Integer, primary_key=True)
-    plate = db.Column(db.String(50), db.ForeignKey('users.plate'), nullable=False)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    
+    parking_id = db.Column(db.Integer, db.ForeignKey('parking.parking_id'), nullable=False)
 
     def __repr__(self):
-        return f'<Reserva {self.reserva_id}>'
+        return f'<Reserva {self.reserva_id} - Usuario {self.user_id} - Parking {self.parking_id}>'
+
 
 class Parking(db.Model):
     __tablename__ = 'parking'
@@ -36,15 +42,21 @@ class Parking(db.Model):
     location = db.Column(db.String(100), nullable=False)
     is_free = db.Column(db.Boolean, default=True)
 
+    reservas = db.relationship('Reserva', backref='parking', lazy=True)
+
     def __repr__(self):
         return f'<Parking {self.location} - {"Libre" if self.is_free else "Ocupado"}>'
+
 
 class Log(db.Model):
     __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True)
-    matricula = db.Column(db.String(50), nullable=False)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    parking_id = db.Column(db.Integer, db.ForeignKey('parking.parking_id'), nullable=True)
+    
     hora_entrada = db.Column(db.DateTime, nullable=False)
     hora_salida = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
-        return f'<Log {self.matricula} - Entrada: {self.hora_entrada} - Salida: {self.hora_salida}>'
+        return f'<Log User {self.user_id} - Entrada: {self.hora_entrada} - Salida: {self.hora_salida}>'    

@@ -1,10 +1,14 @@
 from app import create_app, db
 from sqlalchemy import text
 from app.models import Parking
+from routes import register_routes
+
+# Configurar la aplicación Flask
+app = create_app()
+register_routes(app)
 
 def check_database():
     try:
-        # Intentar conectar a la base de datos
         db.session.execute(text('SELECT 1'))
         print("Conexión a la base de datos exitosa.")
     except Exception as e:
@@ -28,8 +32,6 @@ def insert_parking_data():
         print("Datos de parking insertados exitosamente.")
     else:
         print("Ya hay 25 o más plazas de parking. No se insertaron nuevos datos.")
-
-app = create_app()
 
 if __name__ == '__main__':
     with app.app_context():
