@@ -1,11 +1,9 @@
 from app import create_app, db
 from sqlalchemy import text
 from app.models import Parking
-from routes import register_routes
 
 # Configurar la aplicación Flask
 app = create_app()
-register_routes(app)
 
 def check_database():
     try:

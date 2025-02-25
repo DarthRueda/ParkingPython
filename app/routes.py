@@ -5,9 +5,8 @@ from .models import User, Reserva, Parking, Log
 from datetime import datetime
 
 def register_routes(app):
-
     @app.route('/register', methods=['GET', 'POST'])
-    def register():
+    def register_user():
         form = RegisterForm()
         if form.validate_on_submit():
             user = User(
