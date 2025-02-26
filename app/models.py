@@ -10,7 +10,7 @@ class User(db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    plate = db.Column(db.String(50), unique=True, nullable=True)  # Matrícula del usuario
+    plate = db.Column(db.String(50), unique=True, nullable=True)  
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
 
     reservas = db.relationship('Reserva', backref='user', lazy=True)

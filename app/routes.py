@@ -10,7 +10,7 @@ import pytesseract
 def register_routes(app):
 
     @app.route('/register', methods=['GET', 'POST'])
-    def register():
+    def register_user():
         form = RegisterForm()
         if form.validate_on_submit():
             user = User(
@@ -18,7 +18,6 @@ def register_routes(app):
                 first_name=form.first_name.data,
                 last_name=form.last_name.data,
                 email=form.email.data,
-                plate=form.plate.data  # Se añade matrícula si el usuario la ingresa
             )
             user.set_password(form.password.data)
             db.session.add(user)
@@ -52,6 +51,10 @@ def register_routes(app):
         if 'user' not in session:
             return redirect(url_for('login'))
         return render_template('home.html', user=session['user'])
+    
+    @app.route('/info')
+    def info():
+        return render_template('info.html')
 
     @app.route('/perfil', methods=['GET', 'POST'])
     def perfil():
@@ -65,7 +68,7 @@ def register_routes(app):
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.email = form.email.data
-            user.plate = form.plate.data  # Guardar matrícula del usuario
+            user.plate = form.plate.data
             db.session.commit()
             flash('Perfil actualizado exitosamente.')
             return redirect(url_for('home'))
@@ -78,7 +81,7 @@ def register_routes(app):
         parkings = Parking.query.all()
         return render_template('parkings.html', parkings=parkings)
 
-    @app.route('/reservar_parking', methods=['POST'])
+    @app.route('/reservar_parking', methods=['GET', 'POST'])
     def reservar_parking():
         if 'user' not in session:
             return redirect(url_for('login'))
@@ -108,10 +111,7 @@ def register_routes(app):
         occupied_parkings = total_parkings - free_parkings
         free_percentage = (free_parkings / total_parkings) * 100 if total_parkings > 0 else 0
         occupied_percentage = 100 - free_percentage
-        return render_template('disponibilidad.html', parkings=parkings, 
-                               free_parkings=free_parkings, occupied_parkings=occupied_parkings,
-                               free_percentage=round(free_percentage, 2), 
-                               occupied_percentage=round(occupied_percentage, 2))
+        return render_template('disponibilidad.html', parkings=parkings, free_parkings=free_parkings, occupied_parkings=occupied_parkings, free_percentage=round(free_percentage, 2), occupied_percentage=round(occupied_percentage, 2))
 
     # API para ESP32-CAM - Registro de entrada de vehículos
     @app.route('/api/entrada', methods=['POST'])

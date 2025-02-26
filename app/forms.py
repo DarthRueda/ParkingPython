@@ -14,7 +14,7 @@ class RegisterForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+    submit = SubmitField('Register_user')
 
 class ReservaForm(FlaskForm):
     first_name = StringField('Nombre', validators=[DataRequired()])
@@ -30,4 +30,5 @@ class EditProfileForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=50)])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=50)])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    plate = StringField('Plate', validators=[DataRequired(), Length(min=1, max=10)])
     submit = SubmitField('Guardar Cambios')
