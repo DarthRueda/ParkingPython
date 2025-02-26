@@ -100,3 +100,48 @@ def register_routes(app):
         session.pop('user', None)
         flash('Has cerrado sesión exitosamente.')
         return redirect(url_for('home'))
+    
+    @app.route('/api/actualizarplaza', methods=['POST'])
+    def actualizar_plaza():
+        data = request.get_json()
+        plaza_parking = data.get('plaza_parking')
+        ocupada = data.get('ocupada')
+
+        # Aquí puedes actualizar la base de datos según el estado de la plaza
+        # Por ejemplo:
+        parking = Parking.query.get(plaza_parking)
+        if parking:
+            parking.is_free = not ocupada  # Si está ocupada, marcar como no libre
+            db.session.commit()
+            return jsonify({"message": "Estado de la plaza actualizado"}), 200
+        else:
+            return jsonify({"error": "Plaza no encontrada"}), 404
+    
+    @app.route('/api/entrada', methods=['POST'])
+    def entrada():
+        try:
+            data = request.get_json()
+            matricula = data.get('matricula')
+
+            if not matricula:
+                return jsonify({'error': 'Matrícula no detectada'}), 400
+            
+            user = User.query.filter_by(plate=matricula).first()
+            if not user:
+                return jsonify({'error': 'Usuario no encontrado'}), 404
+            
+            parking_disponible = Parking.query.filter_by(is_free=True).first()
+            if not parking_disponible:
+                return jsonify({'error': 'No hay parqueaderos disponibles'}), 409
+            
+            registro = RegistroAcceso(user_id=user.user_id, plate=matricula, tipo='entrada')
+            db.session.add(registro)
+
+            parking_disponible.is_free = False
+            db.session.commit()
+
+            return jsonify({'message': 'Acceso permitido'}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': str(e)}), 500
+
