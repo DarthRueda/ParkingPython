@@ -1,57 +1,80 @@
 {% extends 'base.html' %}
 
-{% block title %}Disponibilidad{% endblock %}
+{% block title %}Disponibilidad de Plazas{% endblock %}
 
 {% block content %}
-<div class="container container-body2">
-    <div class="shadow p-3 rounded border border-2 border-black">
-        <h2>Disponibilidad</h2>
-        <div class="row mb-3">
-            <div class="col-6 text-center">
-                <img src="{{ url_for('static', filename='img/libre.png') }}" alt="Libre">
-                <p>{{ free_parkings }} Plazas Libres ({{ free_percentage }}%)</p>
-            </div>
-            <div class="col-6 text-center">
-                <img src="{{ url_for('static', filename='img/ocupado.png') }}" alt="Ocupado">
-                <p>{{ occupied_parkings }} Plazas Ocupadas ({{ occupied_percentage }}%)</p>
-            </div>
-        </div>
-        <div class="btn-group" role="group">
-            <button type="button" id="btn-arriba" class="btn btn-primary" onclick="showParking('arriba')">Parking Arriba</button>
-            <button type="button" id="btn-abajo" class="btn btn-secondary" onclick="showParking('abajo')">Parking Abajo</button>
-        </div>
-        <div id="parking-arriba" class="row parking-section">
-            {% for parking in parkings if parking.location == 'Parking Arriba' %}
-            <div class="col-2 mb-3">
-                <div class="card parking-card {{ 'bg-success' if parking.is_free else 'bg-danger' }}">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ parking.location }}</h5>
-                        <p class="card-text">{{ 'Libre' if parking.is_free else 'Ocupado' }}</p>
-                    </div>
+<div class="container mt-4">
+    <h1 class="text-center fw-bold">📍 Disponibilidad de Plazas</h1>
+    <p class="text-center lead">
+        Consulta en tiempo real cuántas plazas están disponibles y elige la mejor opción para ti.
+    </p>
+
+    <div class="row my-4">
+        <!-- Plazas Libres -->
+        <div class="col-md-6 text-center">
+            <div class="card shadow border-success">
+                <div class="card-body d-flex align-items-center flex-column">
+                    <img src="{{ url_for('static', filename='img/libre.png') }}" alt="Plazas Libres" class="img-fluid" width="100">
+                    <h3 class="text-success mt-2 m-0">{{ free_parkings }} Plazas Libres</h3>
+                    <p class="fw-bold">({{ free_percentage }}%)</p>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        <div id="parking-abajo" class="row parking-section" style="display: none;">
-            {% for parking in parkings if parking.location == 'Parking Abajo' %}
-            <div class="col-2 mb-3">
-                <div class="card parking-card {{ 'bg-success' if parking.is_free else 'bg-danger' }}">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ parking.location }}</h5>
-                        <p class="card-text">{{ 'Libre' if parking.is_free else 'Ocupado' }}</p>
-                    </div>
+        <!-- Plazas Ocupadas -->
+        <div class="col-md-6 text-center">
+            <div class="card shadow border-danger">
+                <div class="card-body d-flex align-items-center flex-column">
+                    <img src="{{ url_for('static', filename='img/ocupado.png') }}" alt="Plazas Ocupadas" class="img-fluid" width="100">
+                    <h3 class="text-danger mt-2 me-0">{{ occupied_parkings }} Plazas Ocupadas</h3>
+                    <p class="fw-bold">({{ occupied_percentage }}%)</p>
                 </div>
             </div>
-            {% endfor %}
         </div>
     </div>
+
+    <!-- Botones de Selección -->
+    <div class="d-flex justify-content-center gap-3 my-3">
+        <button type="button" id="btn-arriba" class="btn btn-primary px-4" onclick="showParking('arriba')">🚗 Parking Arriba</button>
+        <button type="button" id="btn-abajo" class="btn btn-secondary px-4" onclick="showParking('abajo')">🅿️ Parking Abajo</button>
+    </div>
+
+    <!-- Sección Parking Arriba -->
+    <div id="parking-arriba" class="row parking-section justify-content-center">
+        {% for parking in parkings if parking.location == 'Parking Arriba' %}
+        <div class="col-md-2 mb-3">
+            <div class="card parking-card text-white {{ 'bg-success' if parking.is_free else 'bg-danger' }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Plaza {{ parking.id }}</h5>
+                    <p class="card-text">{{ 'Disponible' if parking.is_free else 'Ocupada' }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Sección Parking Abajo -->
+    <div id="parking-abajo" class="row parking-section justify-content-center d-none">
+        {% for parking in parkings if parking.location == 'Parking Abajo' %}
+        <div class="col-md-2 mb-3">
+            <div class="card parking-card text-white {{ 'bg-success' if parking.is_free else 'bg-danger' }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Plaza {{ parking.id }}</h5>
+                    <p class="card-text">{{ 'Disponible' if parking.is_free else 'Ocupada' }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
 <script>
     function showParking(parkingType) {
-        document.getElementById('parking-arriba').style.display = parkingType === 'arriba' ? 'flex' : 'none';
-        document.getElementById('parking-abajo').style.display = parkingType === 'abajo' ? 'flex' : 'none';
+        document.getElementById('parking-arriba').classList.toggle('d-none', parkingType !== 'arriba');
+        document.getElementById('parking-abajo').classList.toggle('d-none', parkingType !== 'abajo');
+
         document.getElementById('btn-arriba').classList.toggle('btn-primary', parkingType === 'arriba');
         document.getElementById('btn-arriba').classList.toggle('btn-secondary', parkingType !== 'arriba');
+
         document.getElementById('btn-abajo').classList.toggle('btn-primary', parkingType === 'abajo');
         document.getElementById('btn-abajo').classList.toggle('btn-secondary', parkingType !== 'abajo');
     }

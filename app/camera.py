@@ -17,10 +17,10 @@ def ordenar_puntos(puntos):
     suma = puntos.sum(axis=1)
     diferencia = np.diff(puntos, axis=1)
     return np.array([ 
-        puntos[np.argmin(suma)],  # Top-left
-        puntos[np.argmin(diferencia)],  # Top-right
-        puntos[np.argmax(suma)],  # Bottom-right
-        puntos[np.argmax(diferencia)]  # Bottom-left
+        puntos[np.argmin(suma)], 
+        puntos[np.argmin(diferencia)],  
+        puntos[np.argmax(suma)],  
+        puntos[np.argmax(diferencia)]  
     ], dtype="float32")
 
 def enderezar_imagen(imagen, puntos):
@@ -38,48 +38,45 @@ def enviar_matricula_a_entrada(matricula):
     headers = {"Content-Type": "application/json"}
 
     try:
-        print(f"\n📤 Enviando solicitud a {url}")
-        print(f"📦 Datos enviados: {json.dumps(data, indent=2)}")
+        print(f"\nEnviando solicitud a {url}")
+        print(f"Datos enviados: {json.dumps(data, indent=2)}")
 
-        # Enviar la solicitud correctamente
-        response = requests.post(url, json=data, headers=headers)  # ✅ Enviar JSON correctamente
+        response = requests.post(url, json=data, headers=headers) 
 
-        # Depuración de respuesta
-        print(f"📥 Código de estado: {response.status_code}")
+        print(f"código de estado: {response.status_code}")
 
-        # Intentar decodificar JSON de la respuesta
         try:
             respuesta_json = response.json()
-            print(f"📜 Respuesta JSON: {json.dumps(respuesta_json, indent=2)}")
+            print(f"Respuesta JSON: {json.dumps(respuesta_json, indent=2)}")
         except json.JSONDecodeError:
-            print("⚠️ Respuesta no es JSON válido:")
+            print("Respuesta no es JSON válido:")
             print(response.text)
 
         # Manejo de respuestas HTTP
         if response.status_code == 200:
-            print("✅ Entrada registrada exitosamente.")
+            print("Entrada registrada exitosamente.")
             return True
         elif response.status_code == 400:
-            print("❌ Error: Datos incorrectos (400 Bad Request).")
+            print("Error: Datos incorrectos (400 Bad Request).")
         elif response.status_code == 403:
-            print("🚫 Matrícula no registrada (403 Forbidden).")
+            print("Matrícula no registrada (403 Forbidden).")
         elif response.status_code == 404:
-            print("🔍 Ruta no encontrada (404 Not Found).")
+            print("Ruta no encontrada (404 Not Found).")
         elif response.status_code == 409:
-            print("🚗 Parking completo (409 Conflict).")
+            print("Parking completo (409 Conflict).")
         else:
-            print(f"⚠️ Error desconocido ({response.status_code})")
+            print(f"Error desconocido ({response.status_code})")
 
-        return False  # Si llega aquí, es porque hubo un error
+        return False 
         
     except requests.ConnectionError:
-        print("❌ Error: No se pudo conectar con el servidor.")
+        print("Error: No se pudo conectar con el servidor.")
     except requests.Timeout:
-        print("⌛ Error: Tiempo de espera agotado.")
+        print("Error: Tiempo de espera agotado.")
     except requests.RequestException as e:
-        print(f"⚠️ Error inesperado en la solicitud: {e}")
+        print(f"Error inesperado en la solicitud: {e}")
 
-    return False  # En caso de error, devolver False
+    return False  
 
 while True:
     time.sleep(1.0)

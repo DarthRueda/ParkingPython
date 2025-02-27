@@ -1,54 +1,64 @@
 {% extends 'base.html' %}
 
-{% block title %}Info{% endblock %}
+{% block title %}Información{% endblock %}
 
 {% block content %}
-<div class="title">Antes de reservar!</div>
-<p class="paragraph">
-    Antes de reservar tu plaza en el parking, es importante que entiendas el significado de los colores que se muestran en el sistema. Esto te permitirá identificar rápidamente el estado de cada plaza:
-</p>
+<div class="container mt-4">
+    <h1 class="text-center fw-bold">📢 ¡Antes de Reservar, Toma Nota!</h1>
+    <p class="lead text-center">
+        Para garantizar una mejor experiencia, te explicamos el significado de los colores que verás en el sistema.
+    </p>
 
-<div class="section">
-    <div class="text">
-        <h3>Plaza Libre</h3>
-        <p>
-            Las plazas marcadas en verde están completamente disponibles. Esto significa que nadie las ha reservado ni están ocupadas, por lo que puedes seleccionarlas para reservar.
-            Si ves una plaza en verde y la necesitas, te recomendamos reservarla cuanto antes, ya que podría ser seleccionada por otro usuario en cualquier momento.
-        </p>
+    <div class="alert alert-info text-center" role="alert">
+        🔎 Identifica rápidamente el estado de cada plaza y evita inconvenientes.
     </div>
-    <div class="image">
-        <img src="static/img/libre.png" alt="Plaza Libre">
-    </div>
-</div>
 
-<div class="section">
-    <div class="text">
-        <h3>Plaza Reservada</h3>
-        <p>
-            Una plaza en azul indica que ya ha sido reservada por otro usuario. Aunque en este momento no está ocupada físicamente, no podrás seleccionarla ni usarla porque está apartada para alguien más.
-            Si necesitas una plaza, busca entre las opciones en color verde.
-        </p>
+    <!-- Plaza Libre -->
+    <div class="row align-items-center my-4">
+        <div class="col-md-6">
+            <h3 class="fw-bold text-success">✅ Plaza Libre</h3>
+            <p>
+                Las plazas <span class="fw-bold text-success">verdes</span> están completamente disponibles. Nadie las ha reservado ni ocupado.
+                Si ves una, ¡no dudes en reservarla antes de que alguien más lo haga!
+            </p>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="{{ url_for('static', filename='img/libre.png') }}" alt="Plaza Libre" class="img-fluid rounded shadow">
+        </div>
     </div>
-    <div class="image">
-        <img src="static/img/reservado.png" alt="Plaza Reservada">
-    </div>
-</div>
 
-<div class="section">
-    <div class="text">
-        <h3>Plaza Ocupada</h3>
-        <p>
-            El color rojo indica que una plaza ya está siendo utilizada, es decir, hay un vehículo estacionado en ella. Esta plaza no estará disponible hasta que quede libre nuevamente.
-            Cuando la plaza sea desocupada, cambiará su color a verde si no tiene una reserva futura, o a azul si alguien la ha reservado previamente.
-        </p>
+    <!-- Plaza Reservada -->
+    <div class="row align-items-center flex-md-row-reverse my-4">
+        <div class="col-md-6">
+            <h3 class="fw-bold text-primary">📅 Plaza Reservada</h3>
+            <p>
+                Las plazas en <span class="fw-bold text-primary">azul</span> ya han sido apartadas por otro usuario. Aunque no estén ocupadas físicamente,
+                no podrás seleccionarlas porque tienen una reserva activa. Busca entre las opciones disponibles en verde.
+            </p>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="{{ url_for('static', filename='img/reservado.png') }}" alt="Plaza Reservada" class="img-fluid rounded shadow">
+        </div>
     </div>
-    <div class="image">
-        <img src="static/img/ocupado.png" alt="Plaza Ocupada">
-    </div>
-</div>
 
-<div class="button-container">
-    <a href="{{ url_for('disponibilidad') }}" class="btn-info">Disponibilidad</a>
-    <a href="{{ url_for('reservar_parking') }}" class="btn-info">Reservar</a>
+    <!-- Plaza Ocupada -->
+    <div class="row align-items-center my-4">
+        <div class="col-md-6">
+            <h3 class="fw-bold text-danger">🚗 Plaza Ocupada</h3>
+            <p>
+                Si una plaza está en <span class="fw-bold text-danger">rojo</span>, significa que actualmente hay un vehículo en ella.
+                No podrás seleccionarla hasta que quede libre nuevamente. Si tiene una reserva activa, pasará a azul cuando quede vacía.
+            </p>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="{{ url_for('static', filename='img/ocupado.png') }}" alt="Plaza Ocupada" class="img-fluid rounded shadow">
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="{{ url_for('disponibilidad') }}" class="btn btn-success px-4">📍 Ver Disponibilidad</a>
+        <a href="{{ url_for('reservar_parking') }}" class="btn btn-primary px-4">🅿️ Reservar Ahora</a>
+    </div>
 </div>
 {% endblock %}

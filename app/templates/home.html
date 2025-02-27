@@ -3,62 +3,123 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container mt-4">
+    <!-- Mensajes Flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="alert alert-info">
-                {% for category, message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if messages %}
+    <div class="alert alert-info text-center">
+        {% for category, message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 </div>
-<div class="texto-superior">
-    <p><b>¡Tu Parking Ideal al Alcance de un Clic! 🚗</b></p>
-    <p>¿Cansado de buscar aparcamiento y perder tiempo valioso? Con nuestra plataforma, reservar tu plaza de parking es rápido, fácil y 100% online.</p>
-</div>
-<div class="container-fluid">
-    <div class="row seccion-container">
-        <div class="col-6">
-            <img src="{{ url_for('static', filename='img/parking.png') }}" alt="Parking Image">
+
+<!-- Sección principal -->
+<section class="hero text-center py-5">
+    <div class="container">
+        <h1 class="fw-bold display-4">¡Tu Parking Ideal al Alcance de un Clic! 🚗</h1>
+        <p class="lead">
+            ¿Cansado de dar vueltas buscando aparcamiento? Con nuestra plataforma, reservar una plaza es fácil, rápido y sin complicaciones.
+            <br>Garantiza tu espacio con antelación y olvídate del estrés.
+        </p>
+        <a href="{{ url_for('parkings') }}" class="btn btn-primary btn-lg mt-3">Reservar Ahora</a>
+    </div>
+</section>
+
+<!-- Sección de beneficios -->
+<section class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <img src="{{ url_for('static', filename='img/parking.png') }}" class="img-fluid rounded shadow" alt="Parking">
         </div>
-        <div class="col-6">
-            <p><b>¿Por qué elegirnos?</b></p>
-            <p>🅿️ Reserva Garantizada: Asegura tu plaza con antelación y olvídate del estrés de no encontrar sitio.</p>
-            <p>⏱️ Ahorra Tiempo y Dinero: Precios competitivos y sin rodeos, con tarifas claras y accesibles.</p>
-            <p>📍 Ubicaciones Estratégicas: Encuentra parkings cerca de aeropuertos, estaciones, centros comerciales o tu destino favorito.</p>
-            <p>🔒 Seguridad Total: Parkings vigilados y seguros para tu tranquilidad.</p>
+        <div class="col-lg-6">
+            <h2 class="fw-bold">🚀 ¿Por qué elegirnos?</h2>
+            <ul class="list-unstyled">
+                <li>🅿️ <strong>Reserva Garantizada:</strong> No más vueltas sin sentido, tu plaza estará esperándote.</li>
+                <li>⏱️ <strong>Ahorra Tiempo y Dinero:</strong> Tarifas justas sin sorpresas, olvídate de multas o estacionamientos costosos.</li>
+                <li>📍 <strong>Ubicaciones Estratégicas:</strong> Parkings en zonas clave como aeropuertos, estaciones y centros comerciales.</li>
+                <li>🔒 <strong>Seguridad Total:</strong> Vigilancia 24/7, cámaras y accesos controlados.</li>
+                <li>📅 <strong>Flexibilidad:</strong> Reserva por horas, días o semanas según lo necesites.</li>
+            </ul>
         </div>
     </div>
-    <div class="row seccion-container-right">
-        <div class="col-6">
-            <img src="{{ url_for('static', filename='img/parking2.png') }}" alt="Parking Image">
+</section>
+
+<!-- Sección de proceso -->
+<section class="container my-5">
+    <div class="row align-items-center flex-row-reverse">
+        <div class="col-lg-6">
+            <img src="{{ url_for('static', filename='img/parking2.png') }}" class="img-fluid rounded shadow" alt="Reserva">
         </div>
-        <div class="col-6">
-            <p>
-                <b>¡Tu Plaza en Solo 3 Pasos!</b>
-                <p>1️⃣ Busca el parking más cercano a tu destino.</p>
-                <p>2️⃣ Reserva tu plaza de forma rápida y sencilla.</p>
-                <p>3️⃣ Aparca y disfruta de tu tiempo sin preocupaciones.</p>
-                <p>🚀 Di adiós a dar vueltas buscando aparcamiento.Con nosotros, aparcar es sinónimo de comodidad, seguridad y eficiencia. ¡Prueba ahora y vive la diferencia!</p>
-                <p>📲 ¡Reserva tu plaza ya y olvídate del estrés!</p>
+        <div class="col-lg-6">
+            <h2 class="fw-bold">📋 ¡Tu Plaza en Solo 3 Pasos!</h2>
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item">1️⃣ <strong>Busca</strong> el parking más cercano a tu destino.</li>
+                <li class="list-group-item">2️⃣ <strong>Reserva</strong> de forma rápida y sencilla desde cualquier dispositivo.</li>
+                <li class="list-group-item">3️⃣ <strong>Aparca</strong> sin preocupaciones y disfruta de tu día.</li>
+            </ol>
+            <p class="mt-3">
+                🚀 Olvídate del estrés y las prisas de última hora.
+                Con nuestra plataforma, estacionar es cómodo, seguro y eficiente.
+                <br> ¡Empieza a disfrutar de una nueva forma de aparcar!
             </p>
         </div>
     </div>
-    <div class="row seccion-container">
-        <div class="col-6">
-            <img src="{{ url_for('static', filename='img/parking3.png') }}" alt="Parking Image">
+</section>
+
+<!-- Sección de flexibilidad -->
+<section class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <img src="{{ url_for('static', filename='img/parking3.png') }}" class="img-fluid rounded shadow" alt="Flexibilidad">
         </div>
-        <div class="col-6">
+        <div class="col-lg-6">
+            <h2 class="fw-bold">🎯 Flexibilidad para Todos tus Planes</h2>
             <p>
-                <p>
-                    <b>Flexibilidad para Todos tus Planes</b>
-                </p>
-                <p>Ya sea que necesites una plaza por unas horas, todo el día o incluso semanas, nos adaptamos a ti. 
-                Ofrecemos opciones de corta y larga estancia con tarifas flexibles para que solo pagues por el tiempo que realmente necesitas. ¡Tu comodidad es nuestra prioridad!</p>
+                No importa si necesitas aparcamiento por unas horas, un día o incluso semanas.
+                <strong>Nos adaptamos a ti</strong> con opciones de corta y larga estancia, tarifas flexibles y descuentos exclusivos para usuarios frecuentes.
+            </p>
+            <p>
+                Además, con nuestra opción de <strong>cancelación gratuita</strong>, tienes total libertad para ajustar tu reserva sin penalizaciones.
             </p>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Sección de testimonios -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">✨ Lo que dicen nuestros clientes</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <p>"Reservé en menos de un minuto y al llegar mi plaza estaba lista. ¡Súper recomendado!"</p>
+                    <strong>– Laura G.</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <p>"Nunca fue tan fácil aparcar en el centro de la ciudad. Me ahorré mucho tiempo y dinero."</p>
+                    <strong>– Carlos M.</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <p>"Reservé en un parking cerca del aeropuerto y el servicio fue impecable. Volveré a usarlo."</p>
+                    <strong>– Ana R.</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="d-flex align-items-center flex-column py-5">
+    <h3 class="fw-bold">📲 ¡Reserva tu plaza ahora y disfruta de la comodidad!</h3>
+    <p class="lead">Tu parking ideal está a solo un clic de distancia. No pierdas más tiempo buscando.</p>
+    <a href="{{ url_for('parkings') }}" class="btn btn-light btn-lg mt-3">Ver Parkings Disponibles</a>
+</section>
+
 {% endblock %}
