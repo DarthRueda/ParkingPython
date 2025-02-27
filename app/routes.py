@@ -95,44 +95,52 @@ def register_routes(app):
             flash('El parking no está disponible.')
         return redirect(url_for('parkings'))
 
+    def calculate_parking_percentages():
+        total_parkings = 25
+        free_parkings = Parking.query.filter_by(is_free=True).count()
+        occupied_parkings = Parking.query.filter_by(is_free=False).count()
+        free_percentage = (free_parkings / total_parkings) * 100
+        occupied_percentage = (occupied_parkings / total_parkings) * 100
+        return round(free_percentage, 2), round(occupied_percentage, 2)
+
+    def calculate_parking_counts():
+        free_parkings = Parking.query.filter_by(is_free=True).count()
+        occupied_parkings = Parking.query.filter_by(is_free=False).count()
+        return free_parkings, occupied_parkings
+
+    @app.route('/disponibilidad', methods=['GET'])
+    def disponibilidad():
+        if 'user' not in session:
+            return redirect(url_for('login'))
+        parkings = Parking.query.all()
+        free_parkings, occupied_parkings = calculate_parking_counts()
+        free_percentage, occupied_percentage = calculate_parking_percentages()
+        return render_template('disponibilidad.html', parkings=parkings, free_parkings=free_parkings, occupied_parkings=occupied_parkings, free_percentage=free_percentage, occupied_percentage=occupied_percentage)
+
     @app.route('/logout')
     def logout():
         session.pop('user', None)
         flash('Has cerrado sesión exitosamente.')
         return redirect(url_for('home'))
     
-    @app.route('/api/actualizarplaza', methods=['POST'])
-    def actualizar_plaza():
-        data = request.get_json()
-        plaza_parking = data.get('plaza_parking')
-        ocupada = data.get('ocupada')
-
-        # Aquí puedes actualizar la base de datos según el estado de la plaza
-        # Por ejemplo:
-        parking = Parking.query.get(plaza_parking)
-        if parking:
-            parking.is_free = not ocupada  # Si está ocupada, marcar como no libre
-            db.session.commit()
-            return jsonify({"message": "Estado de la plaza actualizado"}), 200
-        else:
-            return jsonify({"error": "Plaza no encontrada"}), 404
-    
     @app.route('/api/entrada', methods=['POST'])
     def entrada():
         try:
             data = request.get_json()
+            if data is None:
+                return jsonify({'error': 'No se recibió un JSON válido'}), 400
+            
             matricula = data.get('matricula')
-
             if not matricula:
                 return jsonify({'error': 'Matrícula no detectada'}), 400
-            
+
             user = User.query.filter_by(plate=matricula).first()
             if not user:
-                return jsonify({'error': 'Usuario no encontrado'}), 404
+                return jsonify({'error': 'Matrícula no registrada'}), 403 
             
             parking_disponible = Parking.query.filter_by(is_free=True).first()
             if not parking_disponible:
-                return jsonify({'error': 'No hay parqueaderos disponibles'}), 409
+                return jsonify({'error': 'No hay sitios disponibles'}), 409
             
             registro = RegistroAcceso(user_id=user.user_id, plate=matricula, tipo='entrada')
             db.session.add(registro)
@@ -144,4 +152,27 @@ def register_routes(app):
         except Exception as e:
             db.session.rollback()
             return jsonify({'error': str(e)}), 500
+        
+    @app.route('/api/actualizarplaza', methods=['POST'])
+    def actualizar_plaza():
+        try:
+            data = request.get_json()
+            if not data or 'parking_id' not in data or 'estado' not in data:
+                return jsonify({'error': 'Datos inválidos'}), 400
 
+            parking_id = data['parking_id']
+            estado = bool(data['estado'])  # 0 = Ocupado, 1 = Libre
+
+            # Buscar el parking en la base de datos
+            parking = Parking.query.filter_by(parking_id=parking_id).first()
+            if not parking:
+                return jsonify({'error': 'Parking no encontrado'}), 404
+
+            # Actualizar el estado del parking
+            parking.is_free = estado
+            db.session.commit()
+
+            return jsonify({'message': 'Estado actualizado correctamente'}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': str(e)}), 500

@@ -3,13 +3,14 @@ import numpy as np
 import pytesseract
 import requests
 import time
+import json
 
 
 # Configura la ruta de Tesseract si es necesario (Windows)
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # IP de la cámara
-esp32_url = "http://172.16.7.204/capture"
+esp32_url = "http://172.16.6.11/capture"
 
 def ordenar_puntos(puntos):
     puntos = puntos.reshape(4, 2)
@@ -32,27 +33,53 @@ def enderezar_imagen(imagen, puntos):
     return cv2.warpPerspective(imagen, matriz, (int(ancho), int(alto)))
 
 def enviar_matricula_a_entrada(matricula):
+    url = "http://172.16.6.49:81/api/entrada"
+    data = {"matricula": matricula}
+    headers = {"Content-Type": "application/json"}
+
     try:
-        # URL de la ruta en routes.py
-        url = "http://127.0.0.1:81/api/entrada"
-        data = {"matricula": matricula}
-        response = requests.post(url, json=data)
-        
+        print(f"\n📤 Enviando solicitud a {url}")
+        print(f"📦 Datos enviados: {json.dumps(data, indent=2)}")
+
+        # Enviar la solicitud correctamente
+        response = requests.post(url, json=data, headers=headers)  # ✅ Enviar JSON correctamente
+
+        # Depuración de respuesta
+        print(f"📥 Código de estado: {response.status_code}")
+
+        # Intentar decodificar JSON de la respuesta
+        try:
+            respuesta_json = response.json()
+            print(f"📜 Respuesta JSON: {json.dumps(respuesta_json, indent=2)}")
+        except json.JSONDecodeError:
+            print("⚠️ Respuesta no es JSON válido:")
+            print(response.text)
+
+        # Manejo de respuestas HTTP
         if response.status_code == 200:
-            print("Entrada registrada exitosamente.")
+            print("✅ Entrada registrada exitosamente.")
             return True
+        elif response.status_code == 400:
+            print("❌ Error: Datos incorrectos (400 Bad Request).")
         elif response.status_code == 403:
-            print("Matrícula no registrada.")
-            return False
+            print("🚫 Matrícula no registrada (403 Forbidden).")
+        elif response.status_code == 404:
+            print("🔍 Ruta no encontrada (404 Not Found).")
         elif response.status_code == 409:
-            print("Parking completo.")
-            return False
+            print("🚗 Parking completo (409 Conflict).")
         else:
-            print(f"Error en la solicitud HTTP: {response.status_code}")
-            return False
-    except Exception as e:
-        print(f"Error en la solicitud HTTP: {e}")
-        return False
+            print(f"⚠️ Error desconocido ({response.status_code})")
+
+        return False  # Si llega aquí, es porque hubo un error
+        
+    except requests.ConnectionError:
+        print("❌ Error: No se pudo conectar con el servidor.")
+    except requests.Timeout:
+        print("⌛ Error: Tiempo de espera agotado.")
+    except requests.RequestException as e:
+        print(f"⚠️ Error inesperado en la solicitud: {e}")
+
+    return False  # En caso de error, devolver False
 
 while True:
     time.sleep(1.0)
