@@ -26,7 +26,6 @@
         <nav class="container d-flex justify-content-between align-items-center">
             <a href="{{ url_for('home') }}" class="text-light text-decoration-none d-flex align-items-center">
                 <img src="{{ url_for('static', filename='img/icon.png') }}" alt="Logo" class="me-2" width="40">
-                <span class="fw-bold fs-5">Flask Parking</span>
             </a>
 
             {% if 'login' not in request.endpoint and 'register' not in request.endpoint %}
