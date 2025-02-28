@@ -16,13 +16,11 @@ def create_tables():
 
 def insert_parking_data():
     if Parking.query.count() < 25:
-        parkings = [
-            Parking(location='Parking Arriba', is_free=True),
-            Parking(location='Parking Abajo', is_free=False),
-            Parking(location='Parking Arriba', is_free=True),
-            Parking(location='Parking Abajo', is_free=True),
-            Parking(location='Parking Arriba', is_free=False)
-        ]
+        parkings = []
+        for i in range(15):
+            parkings.append(Parking(location='Parking Arriba', is_free=True))
+        for i in range(10):
+            parkings.append(Parking(location='Parking Abajo', is_free=True))
         db.session.bulk_save_objects(parkings)
         db.session.commit()
         print("Datos de parking insertados exitosamente.")
