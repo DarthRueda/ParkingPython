@@ -5,6 +5,8 @@ from . import db
 from .forms import LoginForm, RegisterForm, ReservaForm, EditProfileForm
 from .models import User, Reserva, Parking, Log, RegistroAcceso
 from datetime import datetime
+import time
+import requests
 
 # Configuración para la depuracion del codigo, diferentes tipos de errores
 logging.basicConfig(
@@ -145,6 +147,13 @@ def register_routes(app):
 
 
     # ESP32 and ESP32CAM
+
+    # Diccionario para controlar el tiempo de detección de cada matrícula
+    matricula_cooldown = {}
+
+    # Tiempo mínimo entre detecciones de la misma matrícula (en segundos)
+    COOLDOWN_TIME = 10 
+
     @app.route('/api/entrada', methods=['POST'])
     def entrada():
         try:
@@ -153,6 +162,16 @@ def register_routes(app):
                 return jsonify({'error': 'Matrícula no detectada'}), 400
             
             matricula = data['matricula']
+            current_time = time.time()
+
+            if matricula in matricula_cooldown:
+                last_detected = matricula_cooldown[matricula]
+                if current_time - last_detected < COOLDOWN_TIME:
+                    logger.info(f'Matrícula {matricula} ignorada por cooldown.')
+                    return jsonify({'message': 'Matrícula ignorada por tiempo de espera'}), 429  
+
+            matricula_cooldown[matricula] = current_time  
+
             user = User.query.filter_by(plate=matricula).first()
 
             if not user:
@@ -163,28 +182,42 @@ def register_routes(app):
 
             if ultimo_registro:
                 ultimo_registro.hora_salida = db.func.now()
-
                 db.session.commit()
                 logger.info(f'Salida registrada para matrícula {matricula}')
-                return jsonify({'message': 'Salida registrada'}), 200
+
+                return jsonify({
+                    'message': 'Salida registrada',
+                    'plate': matricula,
+                    'hora_salida': ultimo_registro.hora_salida
+                }), 200
             
             parking_disponible = Parking.query.filter_by(is_free=True).first()
             if not parking_disponible:
                 logger.warning(f'Sin espacios disponibles para la matrícula: {matricula}')
                 return jsonify({'error': 'No hay sitios disponibles'}), 409
 
-            nuevo_log = Log(user_id=user.user_id, plate=matricula, hora_entrada=db.func.now(), parking_id=parking_disponible.parking_id)
+            nuevo_log = Log(
+                user_id=user.user_id,
+                plate=matricula,
+                hora_entrada=db.func.now(),
+                parking_id=parking_disponible.parking_id
+            )
             db.session.add(nuevo_log)
+            parking_disponible.is_free = False  
             db.session.commit()
 
-            logger.info(f'Acceso permitido para matrícula {matricula}')
-            return jsonify({'message': 'Entrada registrada'}), 200
+            logger.info(f'Entrada registrada para matrícula {matricula}')
+
+            return jsonify({
+                'message': 'Entrada registrada',
+                'plate': matricula,
+                'hora_entrada': nuevo_log.hora_entrada
+            }), 200
 
         except Exception as e:
             db.session.rollback()
             logger.error(f'Error en acceso de matrícula: {str(e)}')
             return jsonify({'error': str(e)}), 500
-
     
     @app.route('/api/actualizarplaza', methods=['POST'])
     def actualizar_plaza():
@@ -207,4 +240,38 @@ def register_routes(app):
         except Exception as e:
             db.session.rollback()
             logger.error(f'Error al actualizar plaza: {str(e)}')
+            return jsonify({'error': str(e)}), 500
+
+    ESP32_URL = "http://172.16.6.128:81/api/abrirbarrera"
+
+    @app.route('/api/entrada', methods=['POST'])
+    def entrada():
+        try:
+            data = request.get_json()
+            if not data or 'matricula' not in data:
+                return jsonify({'error': 'Matrícula no detectada'}), 400
+
+            matricula = data['matricula']
+            user = User.query.filter_by(plate=matricula).first()
+
+            if not user:
+                return jsonify({'error': 'Matrícula no registrada'}), 403
+            
+            ultimo_registro = Log.query.filter_by(user_id=user.user_id, plate=matricula, hora_salida=None).first()
+
+            if ultimo_registro:
+                ultimo_registro.hora_salida = db.func.now()
+                db.session.commit()
+                requests.get(ESP32_URL) 
+                return jsonify({'message': 'Salida registrada'}), 200
+
+            nuevo_log = Log(user_id=user.user_id, plate=matricula, hora_entrada=db.func.now())
+            db.session.add(nuevo_log)
+            db.session.commit()
+
+            requests.get(ESP32_URL)  
+            return jsonify({'message': 'Entrada registrada'}), 200
+
+        except Exception as e:
+            db.session.rollback()
             return jsonify({'error': str(e)}), 500
