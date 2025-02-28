@@ -2,6 +2,7 @@ from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 import enum
+from datetime import datetime
 
 # Enum para el tipo de acceso
 class TipoAcceso(enum.Enum):
@@ -42,7 +43,7 @@ class Parking(db.Model):
     parking_id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(100), nullable=False)
     is_free = db.Column(db.Boolean, default=True)
-
+    TimeStamp = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
     reservas = db.relationship('Reserva', backref='parking', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
@@ -66,8 +67,8 @@ class RegistroAcceso(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete='SET NULL'), nullable=True)
     plate = db.Column(db.String(50), nullable=False, index=True)  # Matrícula detectada
-    timestamp = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    tipo = db.Column(db.Enum(TipoAcceso), nullable=False)  # 'entrada' o 'salida'
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    tipo = db.Column(db.Enum(TipoAcceso), nullable=False) 
 
     def __repr__(self):
         return f'<Acceso {self.plate} - {self.tipo.value} - {self.timestamp}>'

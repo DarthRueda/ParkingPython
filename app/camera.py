@@ -4,13 +4,13 @@ import pytesseract
 import requests
 import time
 import json
-
+import re
 
 # Configura la ruta de Tesseract si es necesario (Windows)
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # IP de la cámara
-esp32_url = "http://172.16.6.11/capture"
+esp32_url = "http://172.16.6.220/capture"
 
 def ordenar_puntos(puntos):
     puntos = puntos.reshape(4, 2)
@@ -33,8 +33,15 @@ def enderezar_imagen(imagen, puntos):
     return cv2.warpPerspective(imagen, matriz, (int(ancho), int(alto)))
 
 def enviar_matricula_a_entrada(matricula):
-    url = "http://172.16.6.49:81/api/entrada"
-    data = {"matricula": matricula}
+    url = "http://127.0.0.1:81/api/entrada"
+
+    matricula = matricula.replace(" ", "").upper()
+    
+    matricula = re.sub(r'^[A-Z]', '', matricula)
+
+    matriculaCorrecta = matricula
+
+    data = {"matricula": matriculaCorrecta}
     headers = {"Content-Type": "application/json"}
 
     try:

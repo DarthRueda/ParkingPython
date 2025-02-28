@@ -33,7 +33,6 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Contraseña', validators=[
         DataRequired(message="La contraseña es obligatoria."),
         Length(min=6, message="Debe tener al menos 6 caracteres."),
-        Regexp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$', message="Debe contener al menos una letra y un número.")
     ])
     confirm_password = PasswordField('Confirmar Contraseña', validators=[
         DataRequired(message="Confirme su contraseña."),

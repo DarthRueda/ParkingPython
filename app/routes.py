@@ -19,6 +19,12 @@ def register_routes(app):
     def register_user():
         form = RegisterForm()
         if form.validate_on_submit():
+            print("✅ El formulario es válido y se está procesando.")
+        else:
+            print("❌ El formulario tiene errores:", form.errors)
+
+
+        if form.validate_on_submit():
             try:
                 user = User(
                     username=form.username.data,
@@ -35,6 +41,7 @@ def register_routes(app):
             except Exception as e:
                 db.session.rollback()
                 logger.error(f'Error en registro: {str(e)}')
+                print({e})
                 flash('Error al registrar el usuario.')
         return render_template('register.html', form=form)
 
@@ -44,7 +51,7 @@ def register_routes(app):
         if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
             if user and user.check_password(form.password.data):
-                login_user(user) 
+                login_user(user, remember=True) 
                 flash('Inicio de sesión exitoso')
                 return redirect(url_for('home')) 
             else:
@@ -102,7 +109,7 @@ def register_routes(app):
 
     @app.route('/reservar_parking', methods=['GET', 'POST'])
     def reservar_parking():
-        if 'user' not in session:
+        if not current_user.is_authenticated:
             return redirect(url_for('login'))
         parking_id = request.form.get('parking_id')
         parking = Parking.query.get(parking_id)
@@ -129,7 +136,7 @@ def register_routes(app):
 
     @app.route('/disponibilidad', methods=['GET'])
     def disponibilidad():
-        if 'user' not in session:
+        if not current_user.is_authenticated:
             return redirect(url_for('login'))
         parkings = Parking.query.all()
         free_parkings, occupied_parkings = calculate_parking_counts()
@@ -148,6 +155,11 @@ def register_routes(app):
             
             matricula = data['matricula']
             user = User.query.filter_by(plate=matricula).first()
+
+            if user:
+                registro = RegistroAcceso(user_id=user.user_id, plate=matricula, tipo='salida')
+                return jsonify({'message': 'Salida permitida'}), 200
+
             if not user:
                 logger.warning(f'Intento de acceso con matrícula no registrada: {matricula}')
                 return jsonify({'error': 'Matrícula no registrada'}), 403 
