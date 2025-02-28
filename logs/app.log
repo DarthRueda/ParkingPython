@@ -1940,3 +1940,83 @@
 2025-02-28 16:45:31,374 - INFO - 127.0.0.1 - - [28/Feb/2025 16:45:31] "[36mGET /static/img/libre.png HTTP/1.1[0m" 304 -
 2025-02-28 16:45:31,374 - INFO - 127.0.0.1 - - [28/Feb/2025 16:45:31] "[36mGET /static/img/ocupado.png HTTP/1.1[0m" 304 -
 2025-02-28 16:45:31,403 - INFO - 127.0.0.1 - - [28/Feb/2025 16:45:31] "[36mGET /static/img/icon.png HTTP/1.1[0m" 304 -
+2025-02-28 16:49:12,158 - INFO -  * Detected change in 'C:\\Users\\santi\\Documents\\ParkingPython\\app\\routes.py', reloading
+2025-02-28 16:49:12,285 - INFO -  * Restarting with stat
+2025-02-28 16:49:13,072 - WARNING -  * Debugger is active!
+2025-02-28 16:49:13,075 - INFO -  * Debugger PIN: 895-069-929
+2025-02-28 16:49:51,006 - INFO -  * Detected change in 'C:\\Users\\santi\\Documents\\ParkingPython\\app\\routes.py', reloading
+2025-02-28 16:49:51,087 - INFO -  * Restarting with stat
+2025-02-28 16:49:51,776 - WARNING -  * Debugger is active!
+2025-02-28 16:49:51,778 - INFO -  * Debugger PIN: 895-069-929
+2025-02-28 16:51:29,913 - INFO -  * Detected change in 'C:\\Users\\santi\\Documents\\ParkingPython\\app\\routes.py', reloading
+2025-02-28 16:51:29,979 - INFO -  * Restarting with stat
+2025-02-28 16:55:28,888 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:81
+ * Running on http://172.16.6.128:81
+2025-02-28 16:55:28,888 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-28 16:55:28,889 - INFO -  * Restarting with stat
+2025-02-28 16:55:29,516 - WARNING -  * Debugger is active!
+2025-02-28 16:55:29,519 - INFO -  * Debugger PIN: 895-069-929
+2025-02-28 16:56:54,428 - WARNING - Intento de acceso con matrícula no registrada: S643JSN
+2025-02-28 16:56:54,440 - INFO - 127.0.0.1 - - [28/Feb/2025 16:56:54] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:56:59,041 - WARNING - Intento de acceso con matrícula no registrada: 45649JSN
+2025-02-28 16:56:59,046 - INFO - 127.0.0.1 - - [28/Feb/2025 16:56:59] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:57:01,760 - WARNING - Intento de acceso con matrícula no registrada: 5649JSN
+2025-02-28 16:57:01,765 - INFO - 127.0.0.1 - - [28/Feb/2025 16:57:01] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:57:04,336 - WARNING - Intento de acceso con matrícula no registrada: 5649JSN
+2025-02-28 16:57:04,341 - INFO - 127.0.0.1 - - [28/Feb/2025 16:57:04] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:57:06,679 - WARNING - Intento de acceso con matrícula no registrada: 5649JSN
+2025-02-28 16:57:06,683 - INFO - 127.0.0.1 - - [28/Feb/2025 16:57:06] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:57:06,897 - WARNING - Intento de acceso con matrícula no registrada: O
+2025-02-28 16:57:06,900 - INFO - 127.0.0.1 - - [28/Feb/2025 16:57:06] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:57:28,923 - WARNING - Intento de acceso con matrícula no registrada: 5649JSN
+2025-02-28 16:57:28,928 - INFO - 127.0.0.1 - - [28/Feb/2025 16:57:28] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:58:10,818 - WARNING - Intento de acceso con matrícula no registrada: 5649JS
+2025-02-28 16:58:10,824 - INFO - 127.0.0.1 - - [28/Feb/2025 16:58:10] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:58:13,503 - WARNING - Intento de acceso con matrícula no registrada: 35649JSN
+2025-02-28 16:58:13,510 - INFO - 127.0.0.1 - - [28/Feb/2025 16:58:13] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:58:16,567 - WARNING - Intento de acceso con matrícula no registrada: 35649JSN
+2025-02-28 16:58:16,572 - INFO - 127.0.0.1 - - [28/Feb/2025 16:58:16] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 16:58:20,901 - ERROR - Error en acceso de matrícula: Entity namespace for "logs" has no property "plate"
+2025-02-28 16:58:20,909 - INFO - 127.0.0.1 - - [28/Feb/2025 16:58:20] "[35m[1mPOST /api/entrada HTTP/1.1[0m" 500 -
+2025-02-28 16:58:23,958 - ERROR - Error en acceso de matrícula: Entity namespace for "logs" has no property "plate"
+2025-02-28 16:58:23,965 - INFO - 127.0.0.1 - - [28/Feb/2025 16:58:23] "[35m[1mPOST /api/entrada HTTP/1.1[0m" 500 -
+2025-02-28 16:58:38,505 - INFO -  * Detected change in 'C:\\Users\\santi\\Documents\\ParkingPython\\app\\models.py', reloading
+2025-02-28 16:58:38,577 - INFO -  * Restarting with stat
+2025-02-28 16:58:39,329 - WARNING -  * Debugger is active!
+2025-02-28 16:58:39,331 - INFO -  * Debugger PIN: 895-069-929
+2025-02-28 16:59:21,322 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:81
+ * Running on http://172.16.6.128:81
+2025-02-28 16:59:21,322 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-28 16:59:21,323 - INFO -  * Restarting with stat
+2025-02-28 16:59:21,918 - WARNING -  * Debugger is active!
+2025-02-28 16:59:21,921 - INFO -  * Debugger PIN: 895-069-929
+2025-02-28 16:59:56,563 - WARNING - Intento de acceso con matrícula no registrada: 5649JSW
+2025-02-28 16:59:56,572 - INFO - 127.0.0.1 - - [28/Feb/2025 16:59:56] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 17:00:01,024 - INFO - Acceso permitido para matrícula 5649JSN
+2025-02-28 17:00:01,029 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:01] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:00:01,135 - WARNING - Intento de acceso con matrícula no registrada: O
+2025-02-28 17:00:01,140 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:01] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 17:00:03,044 - INFO - Salida registrada para matrícula 5649JSN
+2025-02-28 17:00:03,048 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:03] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:00:11,377 - INFO - Acceso permitido para matrícula 5649JSN
+2025-02-28 17:00:11,381 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:11] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:00:13,443 - INFO - Salida registrada para matrícula 5649JSN
+2025-02-28 17:00:13,447 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:13] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:00:15,359 - INFO - Acceso permitido para matrícula 5649JSN
+2025-02-28 17:00:15,364 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:15] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:00:17,717 - WARNING - Intento de acceso con matrícula no registrada: 5649JISN
+2025-02-28 17:00:17,723 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:17] "[31m[1mPOST /api/entrada HTTP/1.1[0m" 403 -
+2025-02-28 17:00:19,905 - INFO - Salida registrada para matrícula 5649JSN
+2025-02-28 17:00:19,910 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:19] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:00:23,070 - INFO - Acceso permitido para matrícula 5649JSN
+2025-02-28 17:00:23,074 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:23] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:00:24,889 - INFO - Salida registrada para matrícula 5649JSN
+2025-02-28 17:00:24,895 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:24] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:00:27,586 - INFO - Acceso permitido para matrícula 5649JSN
+2025-02-28 17:00:27,590 - INFO - 127.0.0.1 - - [28/Feb/2025 17:00:27] "POST /api/entrada HTTP/1.1" 200 -
+2025-02-28 17:01:04,994 - INFO -  * Detected change in 'C:\\Users\\santi\\Documents\\ParkingPython\\app\\models.py', reloading
+2025-02-28 17:01:05,071 - INFO -  * Restarting with stat

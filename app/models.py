@@ -60,26 +60,13 @@ class Reserva(db.Model):
     def __repr__(self):
         return f'<Reserva {self.reserva_id} - Usuario {self.user_id} - Parking {self.parking_id}>'
 
-
-# Modelo de Registros de Acceso (para detección de matrículas)
-class RegistroAcceso(db.Model):
-    __tablename__ = 'registro_acceso'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete='SET NULL'), nullable=True)
-    plate = db.Column(db.String(50), nullable=False, index=True)  # Matrícula detectada
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    tipo = db.Column(db.Enum(TipoAcceso), nullable=False) 
-
-    def __repr__(self):
-        return f'<Acceso {self.plate} - {self.tipo.value} - {self.timestamp}>'
-
-
 # Modelo de Logs (Historial de acceso)
 class Log(db.Model):
     __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False)
     parking_id = db.Column(db.Integer, db.ForeignKey('parking.parking_id', ondelete='SET NULL'), nullable=True)
+    plate = db.Column(db.String(50), nullable=False, index=True)
     hora_entrada = db.Column(db.DateTime, nullable=False, server_default=db.func.now())
     hora_salida = db.Column(db.DateTime, nullable=True)
 

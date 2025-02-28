@@ -144,7 +144,6 @@ def register_routes(app):
         return render_template('disponibilidad.html', parkings=parkings, free_parkings=free_parkings, occupied_parkings=occupied_parkings, free_percentage=free_percentage, occupied_percentage=occupied_percentage)
 
 
-
     # ESP32 and ESP32CAM
     @app.route('/api/entrada', methods=['POST'])
     def entrada():
@@ -156,30 +155,36 @@ def register_routes(app):
             matricula = data['matricula']
             user = User.query.filter_by(plate=matricula).first()
 
-            if user:
-                registro = RegistroAcceso(user_id=user.user_id, plate=matricula, tipo='salida')
-                return jsonify({'message': 'Salida permitida'}), 200
-
             if not user:
                 logger.warning(f'Intento de acceso con matrícula no registrada: {matricula}')
                 return jsonify({'error': 'Matrícula no registrada'}), 403 
+            
+            ultimo_registro = Log.query.filter_by(user_id=user.user_id, plate=matricula, hora_salida=None).first()
+
+            if ultimo_registro:
+                ultimo_registro.hora_salida = db.func.now()
+
+                db.session.commit()
+                logger.info(f'Salida registrada para matrícula {matricula}')
+                return jsonify({'message': 'Salida registrada'}), 200
             
             parking_disponible = Parking.query.filter_by(is_free=True).first()
             if not parking_disponible:
                 logger.warning(f'Sin espacios disponibles para la matrícula: {matricula}')
                 return jsonify({'error': 'No hay sitios disponibles'}), 409
-            
-            registro = RegistroAcceso(user_id=user.user_id, plate=matricula, tipo='entrada')
-            db.session.add(registro)
-            parking_disponible.is_free = False
+
+            nuevo_log = Log(user_id=user.user_id, plate=matricula, hora_entrada=db.func.now(), parking_id=parking_disponible.parking_id)
+            db.session.add(nuevo_log)
             db.session.commit()
-            
+
             logger.info(f'Acceso permitido para matrícula {matricula}')
-            return jsonify({'message': 'Acceso permitido'}), 200
+            return jsonify({'message': 'Entrada registrada'}), 200
+
         except Exception as e:
             db.session.rollback()
             logger.error(f'Error en acceso de matrícula: {str(e)}')
             return jsonify({'error': str(e)}), 500
+
     
     @app.route('/api/actualizarplaza', methods=['POST'])
     def actualizar_plaza():
