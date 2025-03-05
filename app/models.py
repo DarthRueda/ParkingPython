@@ -72,3 +72,15 @@ class Log(db.Model):
 
     def __repr__(self):
         return f'<Log User {self.user_id} - Entrada: {self.hora_entrada} - Salida: {self.hora_salida}>'
+
+# Modelo de Registros de Acceso (para detección de matrículas)
+class RegistroAcceso(db.Model):
+    __tablename__ = 'registro_acceso'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete='SET NULL'), nullable=True)
+    plate = db.Column(db.String(50), nullable=False, index=True)  # Matrícula detectada
+    timestamp = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    tipo = db.Column(db.Enum(TipoAcceso), nullable=False)  # 'entrada' o 'salida'
+
+    def __repr__(self):
+        return f'<Acceso {self.plate} - {self.tipo.value} - {self.timestamp}>'
