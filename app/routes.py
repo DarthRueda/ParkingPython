@@ -1,4 +1,3 @@
-import logging
 from flask import render_template, redirect, url_for, flash, session, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
@@ -7,14 +6,6 @@ from .models import User, Reserva, Parking, Log, RegistroAcceso
 from datetime import datetime
 import time
 import requests
-
-# Configuración para la depuracion del codigo, diferentes tipos de errores
-logging.basicConfig(
-    filename='logs/app.log',  
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 def register_routes(app):
     @app.route('/register', methods=['GET', 'POST'])
@@ -245,8 +236,6 @@ def register_routes(app):
             db.session.rollback()
             logger.error(f'Error en acceso de matrícula: {str(e)}')
             return jsonify({'error': 'Error interno del servidor'}), 500
-
-
     
     @app.route('/api/actualizarplaza', methods=['POST'])
     def actualizar_plaza():

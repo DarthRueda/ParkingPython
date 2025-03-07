@@ -1,11 +1,9 @@
 import os
-import logging
 from flask import Flask, redirect, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
-from logging.handlers import RotatingFileHandler
 from .config import Config
 
 # Inicializar extensiones sin vincularlas a la app todavía
@@ -14,17 +12,6 @@ migrate = Migrate()
 bootstrap = Bootstrap()
 login_manager = LoginManager()
 login_manager.login_view = 'login'  
-
-def configure_logging(app):
-    if not os.path.exists('logs'):
-        os.makedirs('logs')
-
-    log_file = 'logs/app.log'
-    handler = RotatingFileHandler(log_file, maxBytes=10240, backupCount=10)
-    handler.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    app.logger.addHandler(handler)
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -42,9 +29,6 @@ def create_app(config_class=Config):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
-
-    # Configurar logs
-    configure_logging(app)
 
     # Registrar rutas
     from .routes import register_routes
