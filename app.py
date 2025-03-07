@@ -39,5 +39,4 @@ if __name__ == '__main__':
         check_database()
         create_tables()
         insert_parking_data()
-        print("Servidor corriendo en: http://127.0.0.1:81")
     app.run(host='0.0.0.0', port=81, debug=True)

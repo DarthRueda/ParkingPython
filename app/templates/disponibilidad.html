@@ -32,13 +32,11 @@
         </div>
     </div>
 
-    <!-- Botones de Selección -->
     <div class="d-flex justify-content-center gap-3 my-3">
         <button type="button" id="btn-arriba" class="btn btn-primary px-4" onclick="showParking('arriba')">🚗 Parking Arriba</button>
         <button type="button" id="btn-abajo" class="btn btn-secondary px-4" onclick="showParking('abajo')">🅿️ Parking Abajo</button>
     </div>
 
-    <!-- Sección Parking Arriba -->
     <div id="parking-arriba" class="row parking-section justify-content-center">
         {% for parking in parkings if parking.location == 'Parking Arriba' %}
         <div class="col-md-2 mb-3">
@@ -52,7 +50,6 @@
         {% endfor %}
     </div>
 
-    <!-- Sección Parking Abajo -->
     <div id="parking-abajo" class="row parking-section justify-content-center d-none">
         {% for parking in parkings if parking.location == 'Parking Abajo' %}
         <div class="col-md-2 mb-3">

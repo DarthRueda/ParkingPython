@@ -36,8 +36,8 @@ def enviar_matricula_a_entrada(matricula):
     url = "http://127.0.0.1:81/api/entrada"
 
     matricula = matricula.replace(" ", "").upper()
-    
-    matricula = re.sub(r'^[A-Z]', '', matricula)
+
+    matricula = re.sub(r'^E', '', matricula)
 
     matriculaCorrecta = matricula
 

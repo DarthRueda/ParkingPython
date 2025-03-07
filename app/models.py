@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
 
     reservas = db.relationship('Reserva', backref='user', lazy=True, cascade="all, delete-orphan")
-    accesos = db.relationship('RegistroAcceso', backref='user', lazy=True, cascade="all, delete-orphan")
+    accesos = db.relationship('Log', backref='user', lazy=True, cascade="all, delete-orphan")
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

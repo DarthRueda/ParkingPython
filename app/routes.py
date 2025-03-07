@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, session, request, j
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .forms import LoginForm, RegisterForm, ReservaForm, EditProfileForm
-from .models import User, Reserva, Parking, Log, RegistroAcceso
+from .models import User, Reserva, Parking, Log
 from datetime import datetime
 import time
 import requests
@@ -28,12 +28,10 @@ def register_routes(app):
                 user.set_password(form.password.data)
                 db.session.add(user)
                 db.session.commit()
-                logger.info(f'Nuevo usuario registrado: {user.username}')
                 flash('Registro exitoso. Por favor, inicia sesión.')
                 return redirect(url_for('login'))
             except Exception as e:
                 db.session.rollback()
-                logger.error(f'Error en registro: {str(e)}')
                 print({e})
                 flash('Error al registrar el usuario.')
         return render_template('register.html', form=form)
@@ -83,7 +81,6 @@ def register_routes(app):
                 return redirect(url_for('home'))
             except Exception as e:
                 db.session.rollback()
-                logger.error(f"Error al actualizar perfil: {e}")
                 flash('Error al actualizar perfil.', 'danger')
         
         return render_template('perfil.html', user=user, form=form)
@@ -163,7 +160,6 @@ def register_routes(app):
             if matricula in matricula_cooldown:
                 last_detected = matricula_cooldown[matricula]
                 if current_time - last_detected < COOLDOWN_TIME:
-                    logger.info(f'Matrícula {matricula} ignorada por cooldown.')
                     return jsonify({'message': 'Matrícula ignorada por tiempo de espera'}), 429
 
             # Actualizar el tiempo de la matrícula para el cooldown
@@ -173,7 +169,6 @@ def register_routes(app):
             user = User.query.filter_by(plate=matricula).first()
 
             if not user:
-                logger.warning(f'Intento de acceso con matrícula no registrada: {matricula}')
                 return jsonify({'error': 'Matrícula no registrada'}), 403
 
             # Verificar si hay un registro de entrada pendiente
@@ -183,15 +178,19 @@ def register_routes(app):
                 # Si ya tiene una entrada, registramos la salida
                 ultimo_registro.hora_salida = db.func.now()
                 db.session.commit()
-                logger.info(f'Salida registrada para matrícula {matricula}')
 
-                # Activar el servo de la barrera
-                response = requests.get(ESP32_URL)
-                if response.status_code == 200:
-                    logger.info(f"Barrera abierta correctamente para matrícula {matricula}")
-                else:
-                    logger.error(f"Error al activar la barrera. Código de respuesta: {response.status_code}")
-                    return jsonify({'error': 'Error al activar la barrera'}), 500
+                try:
+                    response = requests.get(ESP32_URL, timeout=5)  
+                    if response.status_code == 200:
+                        print(f"Barrera abierta correctamente para matrícula {matricula}")
+                    else:
+                        print(f"Error al activar la barrera: Código de estado {response.status_code}")
+                except requests.ConnectionError:
+                    print("Error: No se pudo conectar con la ESP32.")
+                except requests.Timeout:
+                    print("Error: Tiempo de espera agotado al intentar conectar con la ESP32.")
+                except requests.RequestException as e:
+                    print(f"Error inesperado al comunicarse con la ESP32: {e}")
 
                 return jsonify({
                     'message': 'Salida registrada',
@@ -202,7 +201,6 @@ def register_routes(app):
             # Si no hay registro de entrada, reservamos un parking
             parking_disponible = Parking.query.filter_by(is_free=True).first()
             if not parking_disponible:
-                logger.warning(f'Sin espacios disponibles para la matrícula: {matricula}')
                 return jsonify({'error': 'No hay sitios disponibles'}), 409
 
             # Crear un nuevo registro de entrada
@@ -216,15 +214,21 @@ def register_routes(app):
             parking_disponible.is_free = False  
             db.session.commit()
 
-            # Activar el servo de la barrera
-            response = requests.get(ESP32_URL)
-            if response.status_code == 200:
-                logger.info(f"Barrera abierta correctamente para matrícula {matricula}")
-            else:
-                logger.error(f"Error al activar la barrera. Código de respuesta: {response.status_code}")
-                return jsonify({'error': 'Error al activar la barrera'}), 500
+            # Activar el servo de la barrera (con manejo de excepciones)
+            try:
+                response = requests.get(ESP32_URL, timeout=5)  # Timeout de 5 segundos
+                if response.status_code == 200:
+                    print(f"Barrera abierta correctamente para matrícula {matricula}")
+                else:
+                    print(f"Error al activar la barrera: Código de estado {response.status_code}")
+            except requests.ConnectionError:
+                print("Error: No se pudo conectar con la ESP32.")
+            except requests.Timeout:
+                print("Error: Tiempo de espera agotado al intentar conectar con la ESP32.")
+            except requests.RequestException as e:
+                print(f"Error inesperado al comunicarse con la ESP32: {e}")
 
-            logger.info(f'Entrada registrada para matrícula {matricula}')
+            print(f'Entrada registrada para matrícula {matricula}')
 
             return jsonify({
                 'message': 'Entrada registrada',
@@ -234,7 +238,7 @@ def register_routes(app):
 
         except Exception as e:
             db.session.rollback()
-            logger.error(f'Error en acceso de matrícula: {str(e)}')
+            print(f"Error interno del servidor: {e}")
             return jsonify({'error': 'Error interno del servidor'}), 500
     
     @app.route('/api/actualizarplaza', methods=['POST'])
@@ -253,9 +257,7 @@ def register_routes(app):
             parking.is_free = estado
             db.session.commit()
             estado_texto = 'Libre' if estado else 'Ocupado'
-            logger.info(f'Actualización de plaza {parking_id} a estado: {estado_texto}')
             return jsonify({'message': 'Estado actualizado correctamente'}), 200
         except Exception as e:
             db.session.rollback()
-            logger.error(f'Error al actualizar plaza: {str(e)}')
             return jsonify({'error': str(e)}), 500
