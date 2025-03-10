@@ -232,23 +232,40 @@ def register_routes(app):
             print(f"Error interno del servidor: {e}")
             return jsonify({'error': 'Error interno del servidor'}), 500
     
+
     @app.route('/api/actualizarplaza', methods=['POST'])
     def actualizar_plaza():
         try:
             data = request.get_json()
+            print(f"📥 Datos recibidos: {data}")  # Log de entrada
+
+            # Verificar si los datos son válidos
             if not data or 'parking_id' not in data or 'estado' not in data:
+                print("⚠️ Datos inválidos en la solicitud")
                 return jsonify({'error': 'Datos inválidos'}), 400
             
-            parking_id = data['parking_id']
-            estado = bool(data['estado'])
+            try:
+                parking_id = int(data['parking_id'])  # Aseguramos que sea un número
+                estado = bool(int(data['estado']))  # Convertimos el estado a booleano
+            except ValueError:
+                print("❌ Error: parking_id o estado no son números válidos")
+                return jsonify({'error': 'Formato inválido en parking_id o estado'}), 400
+
+            # Buscar el parking en la base de datos
             parking = Parking.query.filter_by(parking_id=parking_id).first()
             if not parking:
+                print(f"❌ Parking ID {parking_id} no encontrado en la BD")
                 return jsonify({'error': 'Parking no encontrado'}), 404
-            
+
+            # Actualizar el estado del parking
             parking.is_free = estado
             db.session.commit()
             estado_texto = 'Libre' if estado else 'Ocupado'
-            return jsonify({'message': 'Estado actualizado correctamente'}), 200
+            print(f"✅ Parking {parking_id} actualizado a {estado_texto}")
+
+            return jsonify({'message': f'Estado actualizado correctamente a {estado_texto}'}), 200
+        
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': str(e)}), 500
+            print(f"🔥 Error en la API: {e}")  # Log del error
+            return jsonify({'error': f'Error interno: {str(e)}'}), 500

@@ -33,7 +33,7 @@ def enderezar_imagen(imagen, puntos):
     return cv2.warpPerspective(imagen, matriz, (int(ancho), int(alto)))
 
 def enviar_matricula_a_entrada(matricula):
-    url = "http://127.0.0.1:81/api/entrada"
+    url = "http://172.16.1.66:81/api/entrada"
 
     matricula = matricula.replace(" ", "").upper()
 
