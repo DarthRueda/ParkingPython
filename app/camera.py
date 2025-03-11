@@ -10,7 +10,7 @@ import re
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # IP de la cámara
-esp32_url = "http://172.16.4.142/capture"
+esp32_url = "http://172.16.1.121/capture"
 
 def ordenar_puntos(puntos):
     puntos = puntos.reshape(4, 2)
@@ -33,7 +33,7 @@ def enderezar_imagen(imagen, puntos):
     return cv2.warpPerspective(imagen, matriz, (int(ancho), int(alto)))
 
 def enviar_matricula_a_entrada(matricula):
-    url = "http://172.16.1.66:81/api/entrada"
+    url = "http://172.16.1.116:81/api/entrada"
 
     matricula = matricula.replace(" ", "").upper()
 

@@ -134,16 +134,14 @@ def register_routes(app):
         return render_template('disponibilidad.html', parkings=parkings, free_parkings=free_parkings, occupied_parkings=occupied_parkings, free_percentage=free_percentage, occupied_percentage=occupied_percentage)
 
 
-    # ESP32 and ESP32CAM
-
-    # Guardar matriculas para el Cooldown
+   # Guardar matriculas para el Cooldown
     matricula_cooldown = {}
 
     # Cooldown para leer las matriculas
     COOLDOWN_TIME = 10
 
     # URL del ESP32 
-    ESP32_URL = "http://172.16.4.80:81/api/abrirbarrera"
+    ESP32_URL = "http://172.16.1.116:81/api/abrirbarrera"
 
     @app.route('/api/entrada', methods=['POST'])
     def entrada():
@@ -155,6 +153,7 @@ def register_routes(app):
             matricula = data['matricula']
             current_time = time.time()
 
+            # Verificar cooldown
             if matricula in matricula_cooldown:
                 last_detected = matricula_cooldown[matricula]
                 if current_time - last_detected < COOLDOWN_TIME:
@@ -162,17 +161,21 @@ def register_routes(app):
 
             matricula_cooldown[matricula] = current_time
 
+            # Buscar usuario en la base de datos
             user = User.query.filter_by(plate=matricula).first()
 
             if not user:
                 return jsonify({'error': 'Matrícula no registrada'}), 403
 
+            # Verificar si el vehículo está saliendo
             ultimo_registro = Log.query.filter_by(user_id=user.user_id, plate=matricula, hora_salida=None).first()
 
             if ultimo_registro:
+                # Registrar salida
                 ultimo_registro.hora_salida = db.func.now()
                 db.session.commit()
 
+                # Llamar al ESP32 para abrir la barrera
                 try:
                     response = requests.get(ESP32_URL, timeout=5)  
                     if response.status_code == 200:
@@ -192,10 +195,12 @@ def register_routes(app):
                     'hora_salida': ultimo_registro.hora_salida
                 }), 200
 
+            # Si no está saliendo, registrar entrada
             parking_disponible = Parking.query.filter_by(is_free=True).first()
             if not parking_disponible:
                 return jsonify({'error': 'No hay sitios disponibles'}), 409
 
+            # Crear nuevo registro de entrada
             nuevo_log = Log(
                 user_id=user.user_id,
                 plate=matricula,
@@ -206,6 +211,7 @@ def register_routes(app):
             parking_disponible.is_free = False  
             db.session.commit()
 
+            # Llamar al ESP32 para abrir la barrera
             try:
                 response = requests.get(ESP32_URL, timeout=5) 
                 if response.status_code == 200:
