@@ -134,16 +134,31 @@ def register_routes(app):
         return render_template('disponibilidad.html', parkings=parkings, free_parkings=free_parkings, occupied_parkings=occupied_parkings, free_percentage=free_percentage, occupied_percentage=occupied_percentage)
 
 
-   # Guardar matriculas para el Cooldown
+    # ESP32
+
+   # Guardar matrículas para el Cooldown
     matricula_cooldown = {}
 
-    # Cooldown para leer las matriculas
+    # Cooldown para leer las matrículas (segundos)
     COOLDOWN_TIME = 10
 
-    # URL del ESP32 
-    ESP32_URL = "http://172.16.1.116:81/api/abrirbarrera"
+    # URL de la ESP32 poner ip del ESP32
+    ESP32_URL = "http://192.168.1.100/abrir_barrera"
 
-    @app.route('/api/entrada', methods=['POST'])
+    def abrir_barrera():
+        try:
+            response = requests.post(ESP32_URL, json={"accion": "abrir"}, timeout=5)
+            if response.status_code == 200:
+                print("Barrera abierta correctamente.")
+                return True
+            else:
+                print(f"Error al activar la barrera: Código {response.status_code}")
+                return False
+        except requests.RequestException as e:
+            print(f"Error al comunicarse con la ESP32: {e}")
+            return False
+
+    @app.route('/entrada', methods=['POST'])
     def entrada():
         try:
             data = request.get_json()
@@ -157,7 +172,7 @@ def register_routes(app):
             if matricula in matricula_cooldown:
                 last_detected = matricula_cooldown[matricula]
                 if current_time - last_detected < COOLDOWN_TIME:
-                    return jsonify({'message': 'Matrícula ignorada por tiempo de espera'}), 429
+                    return jsonify({'message': 'Matrícula ignorada por cooldown'}), 429
 
             matricula_cooldown[matricula] = current_time
 
@@ -166,7 +181,7 @@ def register_routes(app):
 
             if not user:
                 return jsonify({'error': 'Matrícula no registrada'}), 403
-
+            
             # Verificar si el vehículo está saliendo
             ultimo_registro = Log.query.filter_by(user_id=user.user_id, plate=matricula, hora_salida=None).first()
 
@@ -175,19 +190,8 @@ def register_routes(app):
                 ultimo_registro.hora_salida = db.func.now()
                 db.session.commit()
 
-                # Llamar al ESP32 para abrir la barrera
-                try:
-                    response = requests.get(ESP32_URL, timeout=5)  
-                    if response.status_code == 200:
-                        print(f"Barrera abierta correctamente para matrícula {matricula}")
-                    else:
-                        print(f"Error al activar la barrera: Código de estado {response.status_code}")
-                except requests.ConnectionError:
-                    print("Error: No se pudo conectar con la ESP32.")
-                except requests.Timeout:
-                    print("Error: Tiempo de espera agotado al intentar conectar con la ESP32.")
-                except requests.RequestException as e:
-                    print(f"Error inesperado al comunicarse con la ESP32: {e}")
+                # Abrir barrera para la salida
+                abrir_barrera()
 
                 return jsonify({
                     'message': 'Salida registrada',
@@ -195,51 +199,37 @@ def register_routes(app):
                     'hora_salida': ultimo_registro.hora_salida
                 }), 200
 
-            # Si no está saliendo, registrar entrada
+            # Si el vehículo está entrando
             parking_disponible = Parking.query.filter_by(is_free=True).first()
-            if not parking_disponible:
-                return jsonify({'error': 'No hay sitios disponibles'}), 409
 
-            # Crear nuevo registro de entrada
-            nuevo_log = Log(
-                user_id=user.user_id,
-                plate=matricula,
-                hora_entrada=db.func.now(),
-                parking_id=parking_disponible.parking_id
-            )
-            db.session.add(nuevo_log)
-            parking_disponible.is_free = False  
-            db.session.commit()
+            if parking_disponible:
+                nuevo_log = Log(
+                    user_id=user.user_id,
+                    plate=matricula,
+                    hora_entrada=db.func.now(),
+                    parking_id=parking_disponible.parking_id
+                )
+                db.session.add(nuevo_log)
+                parking_disponible.is_free = False  
+                db.session.commit()
 
-            # Llamar al ESP32 para abrir la barrera
-            try:
-                response = requests.get(ESP32_URL, timeout=5) 
-                if response.status_code == 200:
-                    print(f"Barrera abierta correctamente para matrícula {matricula}")
-                else:
-                    print(f"Error al activar la barrera: Código de estado {response.status_code}")
-            except requests.ConnectionError:
-                print("Error: No se pudo conectar con la ESP32.")
-            except requests.Timeout:
-                print("Error: Tiempo de espera agotado al intentar conectar con la ESP32.")
-            except requests.RequestException as e:
-                print(f"Error inesperado al comunicarse con la ESP32: {e}")
+                # Abrir barrera para la entrada
+                abrir_barrera()
 
-            print(f'Entrada registrada para matrícula {matricula}')
-
-            return jsonify({
-                'message': 'Entrada registrada',
-                'plate': matricula,
-                'hora_entrada': nuevo_log.hora_entrada
-            }), 200
+                return jsonify({
+                    'message': 'Entrada registrada',
+                    'plate': matricula,
+                    'hora_entrada': nuevo_log.hora_entrada
+                }), 200
+            else:
+                return jsonify({'error': 'No hay sitios disponibles'}), 409   
 
         except Exception as e:
             db.session.rollback()
             print(f"Error interno del servidor: {e}")
-            return jsonify({'error': 'Error interno del servidor'}), 500
-    
+            return jsonify({'error': 'Error interno del servidor'}), 500    
 
-    @app.route('/api/actualizarplaza', methods=['POST'])
+    @app.route('/actualizarplaza', methods=['POST'])
     def actualizar_plaza():
         try:
             data = request.get_json()
