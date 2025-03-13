@@ -143,7 +143,7 @@ def register_routes(app):
     COOLDOWN_TIME = 10
 
     # URL de la ESP32 poner ip del ESP32
-    ESP32_URL = "http://192.168.1.100/abrir_barrera"
+    ESP32_URL = "http://172.16.6.200/abrir_barrera"
 
     def abrir_barrera():
         try:
